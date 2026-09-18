@@ -36,7 +36,7 @@ const ParallaxText = ({ children, baseVelocity = 100 }) => {
   });
 
   return (
-    <div className="overflow-hidden whitespace-nowrap flex flex-nowrap leading-none tracking-[-0.02em] py-8 sm:py-12 relative z-0">
+    <div className="overflow-hidden whitespace-nowrap flex flex-nowrap leading-none tracking-[-0.02em] py-4 sm:py-6 relative z-0">
       <motion.div
         className="flex whitespace-nowrap font-extrabold text-5xl sm:text-7xl lg:text-8xl uppercase text-transparent bg-clip-text font-outline-2 drop-shadow-sm opacity-20"
         style={{ x, WebkitTextStroke: '1.5px rgba(168,85,247,0.3)' }}
@@ -54,7 +54,7 @@ const ParallaxText = ({ children, baseVelocity = 100 }) => {
 
 export const ScrollMarquee = () => {
   return (
-    <div className="w-full relative mt-10 mb-6 bg-transparent border-y border-purple-500/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]">
+    <div className="w-full relative mt-4 mb-2 bg-transparent border-y border-purple-500/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]">
       {/* Decorative Glow inside Marquee */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#05020c] via-transparent to-[#05020c] z-10 pointer-events-none" />
       <ParallaxText baseVelocity={2}>

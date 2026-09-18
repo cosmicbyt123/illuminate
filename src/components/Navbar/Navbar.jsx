@@ -29,23 +29,14 @@ export const Navbar = ({ onRegisterClick }) => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Group (Logos) */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            {/* Illuminate Logo */}
-            <Link to="/" className="flex items-center group mr-2 sm:mr-4">
-              <img 
-                src="/assets/logos/illuminate_logo_crop2.png" 
-                alt="Illuminate" 
-                className="h-6 sm:h-7 w-auto object-contain"
-              />
-            </Link>
-
+          {/* Brand Group (Logos in Drop-Shadow Box) */}
+          <div className="flex items-center gap-2 sm:gap-3 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl bg-[#0e0722]/90 backdrop-blur-md border border-purple-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.6)] hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all">
             {/* Raghu Engg College Logo */}
             <a
               href="https://raghuenggcollege.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/95 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-300/40 hover:border-purple-300 hover:shadow-glow-sm transition-all flex items-center justify-center flex-shrink-0"
+              className="bg-white px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-200/40 shadow-sm hover:shadow-md hover:scale-105 transition-all flex items-center justify-center flex-shrink-0"
               title="Raghu Engineering College (Autonomous)"
             >
               <img
@@ -56,7 +47,7 @@ export const Navbar = ({ onRegisterClick }) => {
             </a>
 
             {/* Divider */}
-            <span className="text-purple-500/40 font-mono text-xs hidden xs:inline select-none">
+            <span className="text-purple-400/80 font-mono text-xs font-bold select-none">
               ×
             </span>
 
@@ -65,7 +56,7 @@ export const Navbar = ({ onRegisterClick }) => {
               href="https://www.ecell.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/95 px-2 py-1 rounded-lg border border-purple-300/40 hover:border-purple-300 hover:shadow-glow-sm transition-all flex items-center justify-center flex-shrink-0"
+              className="bg-white px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-200/40 shadow-sm hover:shadow-md hover:scale-105 transition-all flex items-center justify-center flex-shrink-0"
               title="E-Cell, IIT Bombay"
             >
               <img
@@ -76,23 +67,34 @@ export const Navbar = ({ onRegisterClick }) => {
             </a>
           </div>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6">
+          {/* Desktop Navigation Links (Floating Glass Pill Bar) */}
+          <nav className="hidden lg:flex items-center gap-1.5 p-1.5 rounded-full bg-[#0d0722]/80 border border-purple-500/30 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.5)]">
             <Link
               to="/"
-              className={`text-xs font-semibold tracking-wide uppercase transition-colors relative py-1 focus:outline-none ${location.pathname === '/' ? 'text-white' : 'text-slate-300 hover:text-white'}`}
+              className={`text-xs font-semibold tracking-wide uppercase px-3.5 py-1.5 rounded-full transition-all relative focus:outline-none ${
+                location.pathname === '/'
+                  ? 'text-white bg-gradient-to-r from-purple-600 to-indigo-600 border border-purple-400/40 shadow-glow-sm'
+                  : 'text-slate-300 hover:text-white hover:bg-purple-950/40'
+              }`}
             >
               Home
             </Link>
-            {SITE_DATA.navLinks.map((link) => (
-              <Link
-                key={link.label}
-                to={link.href}
-                className={`text-xs font-semibold tracking-wide uppercase transition-colors relative py-1 focus:outline-none ${location.pathname === link.href ? 'text-purple-300 drop-shadow-md' : 'text-slate-300 hover:text-white'}`}
-              >
-                {link.label}
-              </Link>
-            ))}
+            {SITE_DATA.navLinks.map((link) => {
+              const isActive = location.pathname === link.href;
+              return (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className={`text-xs font-semibold tracking-wide uppercase px-3.5 py-1.5 rounded-full transition-all relative focus:outline-none ${
+                    isActive
+                      ? 'text-white bg-gradient-to-r from-purple-600 to-indigo-600 border border-purple-400/40 shadow-glow-sm'
+                      : 'text-slate-300 hover:text-white hover:bg-purple-950/40'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Right Action: Register CTA & Mobile Hamburger */}

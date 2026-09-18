@@ -54,7 +54,7 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
   return (
     <section
       id="hero"
-      className="relative min-h-[100svh] sm:min-h-screen pt-24 pb-20 sm:pt-36 sm:pb-24 px-5 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center justify-center text-center overflow-hidden"
+      className="relative pt-3 sm:pt-8 pb-6 sm:pb-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center overflow-hidden"
     >
       <BackgroundGlow />
 
@@ -67,34 +67,35 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
         {/* Floating Pill Badge */}
         <motion.div 
           variants={textVariants}
-          className="inline-flex flex-wrap items-center justify-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full glass-panel border-purple-500/40 text-purple-300 text-xs sm:text-sm mb-6 sm:mb-8 max-w-[95%]"
+          className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full glass-panel border-purple-500/40 text-[10px] sm:text-xs text-purple-300 mb-5 sm:mb-8 max-w-[92vw] overflow-hidden shadow-sm"
         >
-          <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-          <span className="font-bold text-amber-300 tracking-wide uppercase">
+          <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
+          <span className="font-bold text-amber-300 tracking-wider uppercase whitespace-nowrap flex-shrink-0">
             {EVENT_DATA.offerBadge}
           </span>
-          <span className="text-purple-400/50 hidden xs:inline">|</span>
-          <span className="text-slate-200 font-medium tracking-wide">
+          <span className="hidden sm:inline text-purple-400/50">&bull;</span>
+          <span className="hidden sm:inline text-slate-200 font-medium tracking-wide truncate">
             {EVENT_DATA.badge}
           </span>
         </motion.div>
 
-        {/* Spring-Animated Logo (Now Scaled Up as Main Headline) */}
+        {/* Spring-Animated Logo (Centerpiece Headline) */}
         <motion.div 
           variants={heroVariants}
-          className="relative z-10 mb-8 sm:mb-14 w-full max-w-5xl px-2 sm:px-4 flex justify-center scale-110 sm:scale-125 md:scale-[1.4]"
+          className="relative z-10 mb-6 sm:mb-12 w-full max-w-5xl px-2 sm:px-4 flex justify-center"
         >
           <img 
-            src="/assets/logos/illuminate_logo_crop2.png" 
-            alt="E-Cell Illuminate 2026" 
-            className="w-auto h-24 sm:h-32 md:h-40 object-contain drop-shadow-[0_0_20px_rgba(255,255,255,0.2)]"
+            src="/assets/logos/illuminate-hero-logo.png" 
+            alt="Illuminate 2026 - Empowering the next generation of Changemakers" 
+            className="w-auto h-28 sm:h-44 md:h-56 lg:h-64 xl:h-72 max-w-[88vw] object-contain drop-shadow-[0_0_45px_rgba(168,85,247,0.45)] contrast-[1.06] brightness-[1.02] select-none transition-transform duration-300 hover:scale-[1.02]"
           />
+          <h1 className="sr-only">Illuminate 2026 - Empowering The Next Generation of Changemakers</h1>
         </motion.div>
 
         {/* Subtitle / Description */}
         <motion.p 
           variants={textVariants}
-          className="relative z-10 text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl leading-relaxed mb-8 sm:mb-10 px-2 font-normal"
+          className="relative z-10 text-xs sm:text-base md:text-xl text-slate-300 max-w-3xl leading-relaxed mb-6 sm:mb-10 px-2 sm:px-2 font-normal text-center w-full break-words"
         >
           Organized by the{' '}
           <span className="text-white font-semibold">
@@ -110,7 +111,7 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
         {/* Logistics Card Pill (Venue, Schedule, Pricing) */}
         <motion.div 
           variants={textVariants}
-          className="relative z-10 glass-panel rounded-2xl p-4 sm:p-5 max-w-3xl w-full border-purple-500/30 mb-8 sm:mb-10 shadow-glow-sm"
+          className="relative z-10 glass-panel rounded-2xl p-4 sm:p-5 max-w-3xl w-full border-purple-500/30 mb-8 sm:mb-10 shadow-glow-sm overflow-hidden"
         >
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-4 divide-y sm:divide-y-0 sm:divide-x divide-purple-800/40 text-left">
             {/* Venue */}

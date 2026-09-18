@@ -16,17 +16,12 @@ export function ScrollReveal({
   return (
     <motion.div
       className={className}
-      initial={
-        reduceMotion
-          ? { opacity: 1 }
-          : { opacity: 0, y: distance }
-      }
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.12, margin: '0px 0px -5% 0px' }}
+      initial={{ opacity: 0, y: reduceMotion ? 0 : distance }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{
         type: "spring",
-        bounce: 0.35,
-        duration: reduceMotion ? 0 : 1.2,
+        bounce: 0.25,
+        duration: reduceMotion ? 0 : 0.8,
         delay: reduceMotion ? 0 : delay,
       }}
     >

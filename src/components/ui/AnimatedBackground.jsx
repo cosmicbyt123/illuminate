@@ -1,24 +1,23 @@
-import React, { useEffect, useRef } from 'react';
-import { useReducedMotion } from 'framer-motion';
+import React from 'react';
+import { Particles } from './particles';
 
 /**
  * Ultra-Smooth High Performance Animated Cosmic Background
- * Uses pure CSS GPU compositor animations for glowing auroras and
- * an optimized lightweight HTML5 canvas for stardust particles.
+ * Combines ScrollX UI Interactive 3D Particles with glowing auroras.
  */
 export const AnimatedBackground = () => {
-  const canvasRef = useRef(null);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    // Disabled canvas animation to prevent scroll lag and CPU overhead
-  }, [reduceMotion]);
-
   return (
     <div
-      className="fixed inset-0 -z-20 overflow-hidden pointer-events-none select-none bg-[#05020c]"
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-none select-none bg-[#05020c]"
       aria-hidden="true"
     >
+      {/* ScrollX UI Interactive 3D Cosmic Theme Particles (High Density & Reactive) */}
+      <Particles
+        particleCount={14000}
+        particleSize={22}
+        className="z-0 opacity-95"
+      />
+
       {/* Aurora Orb 1: Upper Violet Aurora (Static GPU float) */}
       <div
         className="absolute -top-32 left-1/4 w-[450px] sm:w-[700px] h-[450px] sm:h-[700px] rounded-full bg-gradient-to-br from-purple-700/20 via-violet-600/12 to-transparent blur-[40px] pointer-events-none will-change-transform"
@@ -49,12 +48,6 @@ export const AnimatedBackground = () => {
           maskImage: 'radial-gradient(circle at 50% 40%, black 20%, transparent 85%)',
           WebkitMaskImage: 'radial-gradient(circle at 50% 40%, black 20%, transparent 85%)',
         }}
-      />
-
-      {/* 60 FPS Lightweight Constellation Particle Canvas */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 w-full h-full opacity-65"
       />
 
       {/* Vignette Edge Fade */}

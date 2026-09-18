@@ -15,10 +15,10 @@ export const Footer = () => {
 
   return (
     <>
-      <footer className="relative bg-[#05020c] border-t border-purple-900/40 text-slate-400 text-xs pt-16 pb-12 z-10">
+      <footer className="relative bg-[#05020c] border-t border-purple-900/40 text-slate-400 text-xs pt-8 pb-8 sm:pt-12 sm:pb-10 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Main Footer Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-12 border-b border-purple-900/30">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 pb-8 border-b border-purple-900/30">
             {/* Col 1: Brand & Institution Info (5 cols) */}
             <div className="md:col-span-5 space-y-4 text-left">
               <div className="flex items-center gap-3">
