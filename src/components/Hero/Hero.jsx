@@ -2,7 +2,6 @@ import React from 'react';
 import { ArrowRight, MapPin, Calendar, Sparkles, ChevronDown } from 'lucide-react';
 import EVENT_DATA from '../../data/event';
 import BackgroundGlow from './BackgroundGlow';
-import IlluminateLogo from '../ui/IlluminateLogo';
 
 export const Hero = ({ onRegisterClick }) => {
   const handleScrollTo = (e, href) => {
@@ -21,8 +20,8 @@ export const Hero = ({ onRegisterClick }) => {
       <BackgroundGlow />
 
       {/* Floating Pill Badge */}
-      <div className="relative z-10 inline-flex flex-wrap items-center justify-center gap-2 px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full glass-panel border-purple-500/40 text-purple-300 text-xs sm:text-sm mb-6 sm:mb-8 max-w-[95%]">
-        <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+      <div className="relative z-10 inline-flex flex-wrap items-center justify-center gap-2.5 px-4 sm:px-5 py-2 rounded-full glass-panel border-purple-500/40 text-purple-300 text-xs sm:text-sm md:text-base mb-6 sm:mb-8 max-w-[95%]">
+        <span className="inline-block w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
         <span className="font-bold text-amber-300 tracking-wide uppercase">
           {EVENT_DATA.offerBadge}
         </span>
@@ -32,19 +31,18 @@ export const Hero = ({ onRegisterClick }) => {
         </span>
       </div>
 
-      {/* Plain Vector Brand Mark with Animated Fire on the 'i' */}
-      <div className="relative z-10 mb-6 sm:mb-8">
-        <IlluminateLogo size="hero" showTagline={false} />
+      {/* Official Illuminate Brand Logo (Prominent Screen-Scale Size) */}
+      <div className="relative z-10 mb-8 sm:mb-12 w-full max-w-5xl px-2 sm:px-4 flex justify-center">
+        <img
+          src="/assets/logos/illuminate-hero-logo.png"
+          alt="Illuminate 2026 - Empowering the next generation of Changemakers"
+          className="w-auto h-32 sm:h-44 md:h-56 lg:h-64 xl:h-72 max-w-[95vw] object-contain drop-shadow-[0_0_40px_rgba(168,85,247,0.4)] contrast-[1.06] brightness-[1.02] select-none transition-transform duration-300 hover:scale-[1.03]"
+        />
+        <h1 className="sr-only">Illuminate 2026 - Empowering The Next Generation of Changemakers</h1>
       </div>
 
-      {/* Main Headline */}
-      <h1 className="relative z-10 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white max-w-4xl leading-[1.12] mb-5 sm:mb-6">
-        Empowering The Next Generation of{' '}
-        <span className="gradient-text-electric">Changemakers</span>
-      </h1>
-
-      {/* Subtitle / Description */}
-      <p className="relative z-10 text-sm sm:text-base md:text-lg text-slate-300 max-w-2xl leading-relaxed mb-8 sm:mb-10 px-2 font-normal">
+      {/* Subtitle / Description - Enriched Size & Readability */}
+      <p className="relative z-10 text-base sm:text-lg md:text-xl text-slate-200 max-w-3xl leading-relaxed mb-8 sm:mb-10 px-2 font-normal">
         Organized by the{' '}
         <span className="text-white font-semibold">
           {EVENT_DATA.organizer.name} at {EVENT_DATA.organizer.college}

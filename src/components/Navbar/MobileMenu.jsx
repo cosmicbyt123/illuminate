@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { X, ArrowRight, ExternalLink } from 'lucide-react';
 import SITE_DATA from '../../data/site';
 import EVENT_DATA from '../../data/event';
-import IlluminateLogo from '../ui/IlluminateLogo';
 
 export const MobileMenu = ({ isOpen, onClose, onRegisterClick }) => {
   useEffect(() => {
@@ -51,14 +50,20 @@ export const MobileMenu = ({ isOpen, onClose, onRegisterClick }) => {
 
       {/* Drawer Container */}
       <div className="relative z-10 flex flex-col h-full bg-[#080417] border-l border-purple-500/20 p-6 overflow-y-auto">
-        {/* Header with Plain Logo & Close */}
+        {/* Header with Logos Drop Shadow Box & Close */}
         <div className="flex items-center justify-between pb-6 border-b border-purple-900/40">
-          <div className="flex items-center gap-3">
-            <IlluminateLogo size="nav" showTagline={false} showYear={false} />
-            <div className="h-4 w-[1px] bg-purple-500/30" />
-            <span className="text-xs font-mono text-purple-300 font-semibold uppercase tracking-wider">
-              REC × IITB
-            </span>
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0e0722]/90 border border-purple-500/30 shadow-md shadow-black/50">
+            <img
+              src="/assets/logos/rec-logo.png"
+              alt="REC"
+              className="h-5 w-auto object-contain bg-white px-1.5 py-0.5 rounded"
+            />
+            <span className="text-purple-400/80 font-mono text-xs font-bold">×</span>
+            <img
+              src="/assets/logos/ecell-logo.jpeg"
+              alt="E-Cell IITB"
+              className="h-5 w-auto object-contain bg-white px-1.5 py-0.5 rounded"
+            />
           </div>
 
           <button

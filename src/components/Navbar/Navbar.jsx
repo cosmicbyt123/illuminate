@@ -3,7 +3,6 @@ import { Menu, ArrowRight } from 'lucide-react';
 import SITE_DATA from '../../data/site';
 import EVENT_DATA from '../../data/event';
 import MobileMenu from './MobileMenu';
-import IlluminateLogo from '../ui/IlluminateLogo';
 
 export const Navbar = ({ onRegisterClick }) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -38,14 +37,14 @@ export const Navbar = ({ onRegisterClick }) => {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Group (Logos) */}
-          <div className="flex items-center gap-2 sm:gap-4">
+          {/* Brand Group (Logos in Drop-Shadow Box) */}
+          <div className="flex items-center gap-2 sm:gap-3 px-3 py-1.5 sm:px-4 sm:py-2 rounded-2xl bg-[#0e0722]/90 backdrop-blur-md border border-purple-500/30 shadow-[0_8px_30px_rgba(0,0,0,0.6)] hover:border-purple-400/50 hover:shadow-[0_8px_30px_rgba(168,85,247,0.25)] transition-all">
             {/* Raghu Engg College Logo */}
             <a
               href="https://raghuenggcollege.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/95 px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-300/40 hover:border-purple-300 hover:shadow-glow-sm transition-all flex items-center justify-center flex-shrink-0"
+              className="bg-white px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-200/40 shadow-sm hover:shadow-md hover:scale-105 transition-all flex items-center justify-center flex-shrink-0"
               title="Raghu Engineering College (Autonomous)"
             >
               <img
@@ -56,7 +55,7 @@ export const Navbar = ({ onRegisterClick }) => {
             </a>
 
             {/* Divider */}
-            <span className="text-purple-500/40 font-mono text-xs hidden xs:inline select-none">
+            <span className="text-purple-400/80 font-mono text-xs font-bold select-none">
               ×
             </span>
 
@@ -65,7 +64,7 @@ export const Navbar = ({ onRegisterClick }) => {
               href="https://www.ecell.in"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-white/95 px-2 py-1 rounded-lg border border-purple-300/40 hover:border-purple-300 hover:shadow-glow-sm transition-all flex items-center justify-center flex-shrink-0"
+              className="bg-white px-2 py-1 sm:px-2.5 sm:py-1 rounded-lg border border-purple-200/40 shadow-sm hover:shadow-md hover:scale-105 transition-all flex items-center justify-center flex-shrink-0"
               title="E-Cell, IIT Bombay"
             >
               <img
@@ -73,21 +72,6 @@ export const Navbar = ({ onRegisterClick }) => {
                 alt="E-Cell IIT Bombay"
                 className="h-5 sm:h-6 w-auto object-contain"
               />
-            </a>
-
-            {/* Divider */}
-            <span className="text-purple-500/40 font-mono text-xs hidden sm:inline select-none">
-              |
-            </span>
-
-            {/* Illuminate Plain Brand Link with Animated Flame 'i' */}
-            <a
-              href="#hero"
-              onClick={(e) => handleScrollTo(e, '#hero')}
-              className="flex items-center focus:outline-none group transition-transform hover:scale-105"
-              title="Illuminate 2026 Home"
-            >
-              <IlluminateLogo size="nav" />
             </a>
           </div>
 
