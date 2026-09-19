@@ -6,36 +6,38 @@ import EVENT_DATA from '../../data/event';
 import BackgroundGlow from './BackgroundGlow';
 import IlluminateLogo from '../ui/IlluminateLogo';
 
+const isMobileDevice = typeof window !== 'undefined' && window.innerWidth < 768;
+
 const heroVariants = {
   offscreen: {
-    y: 100,
+    y: isMobileDevice ? 0 : 100,
     opacity: 0,
-    rotate: 2,
+    rotate: isMobileDevice ? 0 : 2,
   },
   onscreen: {
     y: 0,
     opacity: 1,
     rotate: 0,
     transition: {
-      type: "spring",
-      bounce: 0.4,
-      duration: 1.2,
+      type: isMobileDevice ? "tween" : "spring",
+      bounce: isMobileDevice ? 0 : 0.4,
+      duration: isMobileDevice ? 0.2 : 1.2,
     },
   },
 };
 
 const textVariants = {
   offscreen: {
-    y: 50,
+    y: isMobileDevice ? 0 : 50,
     opacity: 0,
   },
   onscreen: {
     y: 0,
     opacity: 1,
     transition: {
-      type: "spring",
-      bounce: 0.3,
-      duration: 1,
+      type: isMobileDevice ? "tween" : "spring",
+      bounce: isMobileDevice ? 0 : 0.3,
+      duration: isMobileDevice ? 0.2 : 1,
     },
   },
 };
@@ -44,8 +46,8 @@ const containerVariants = {
   offscreen: {},
   onscreen: {
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.4, // Faster delay
+      staggerChildren: isMobileDevice ? 0.04 : 0.15,
+      delayChildren: isMobileDevice ? 0 : 0.4, // Instant on mobile
     }
   }
 };

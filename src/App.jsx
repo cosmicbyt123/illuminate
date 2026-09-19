@@ -28,8 +28,18 @@ const pageTransition = {
 
 export function App() {
   const [showPreloader, setShowPreloader] = useState(true);
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check, { passive: true });
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   // On page refresh / initial mount, return to the Hero section
   useEffect(() => {
@@ -71,16 +81,9 @@ export function App() {
 
       {/* Main Page Content with Animated Transitions */}
       <main className="relative z-10 flex-1 flex flex-col pt-20 pb-8 md:pb-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={location.pathname}
-            initial="initial"
-            animate="animate"
-            exit="exit"
-            variants={pageVariants}
-            transition={pageTransition}
-            className="flex-1 flex flex-col"
-          >
+        {isMobile ? (
+          /* Mobile: Instant zero-latency native route rendering (Zero blank freeze, zero wait lag) */
+          <div key={location.pathname} className="flex-1 flex flex-col">
             <Routes location={location}>
               <Route path="/" element={
                 <>
@@ -94,8 +97,35 @@ export function App() {
               <Route path="/faq" element={<FAQSection />} />
               <Route path="/contact" element={<ContactSection />} />
             </Routes>
-          </motion.div>
-        </AnimatePresence>
+          </div>
+        ) : (
+          /* Desktop: Smooth Framer Motion page transition */
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={location.pathname}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              transition={pageTransition}
+              className="flex-1 flex flex-col"
+            >
+              <Routes location={location}>
+                <Route path="/" element={
+                  <>
+                    <Hero onRegisterClick={handleRegisterClick} isReady={!showPreloader} />
+                    <ScrollMarquee />
+                  </>
+                } />
+                <Route path="/about" element={<EventIntro />} />
+                <Route path="/speaker" element={<SpeakerSection />} />
+                <Route path="/register" element={<RegistrationWizard />} />
+                <Route path="/faq" element={<FAQSection />} />
+                <Route path="/contact" element={<ContactSection />} />
+              </Routes>
+            </motion.div>
+          </AnimatePresence>
+        )}
       </main>
 
       {/* Footer */}

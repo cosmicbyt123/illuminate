@@ -3,7 +3,8 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 /**
  * ScrollReveal Component
- * High-performance GPU-accelerated viewport entrance with zero repaint stutter.
+ * Desktop: GPU-accelerated viewport spring entrance.
+ * Mobile: Instant zero-overhead rendering to eliminate navigation lag and jitter on phone.
  */
 export function ScrollReveal({
   children,
@@ -12,17 +13,26 @@ export function ScrollReveal({
   className = '',
 }) {
   const reduceMotion = useReducedMotion();
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+  if (isMobile || reduceMotion) {
+    return (
+      <div className={className}>
+        {children}
+      </div>
+    );
+  }
 
   return (
     <motion.div
       className={className}
-      initial={{ opacity: 0, y: reduceMotion ? 0 : distance }}
+      initial={{ opacity: 0, y: distance }}
       animate={{ opacity: 1, y: 0 }}
       transition={{
         type: "spring",
         bounce: 0.25,
-        duration: reduceMotion ? 0 : 0.8,
-        delay: reduceMotion ? 0 : delay,
+        duration: 0.8,
+        delay: delay,
       }}
     >
       {children}
