@@ -7,7 +7,7 @@ export const FAQ_DATA = [
   {
     id: "faq-1",
     question: "Who is eligible to participate in Illuminate 2026?",
-    answer: "All undergraduate and postgraduate college students from any engineering branch (CSE, CSM, CSC, ECE, EEE, Mechanical, Civil, IoT, etc.) across 1st, 2nd, 3rd, and 4th years are welcome. No prior business experience or active startup is required."
+    answer: "Only B.Tech undergraduate students (1st, 2nd, 3rd, and 4th year students only) can attend. Students from any engineering branch (CSE, CSM, CSC, ECE, EEE, Mechanical, Civil, IoT, etc.) across these four years are eligible to participate. No prior business experience or active startup is required."
   },
   {
     id: "faq-2",

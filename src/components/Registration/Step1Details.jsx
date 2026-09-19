@@ -4,22 +4,21 @@ import { validateRegistrationForm } from '../../services/registrationService';
 
 const BRANCH_OPTIONS = [
   'CSE (Computer Science & Engineering)',
-  'CSM (CSE - AI & Machine Learning)',
-  'CSC (CSE - Cyber Security / Data Science)',
-  'ECE (Electronics & Communication)',
-  'EEE (Electrical & Electronics)',
-  'Mechanical Engineering',
-  'Civil Engineering',
-  'IoT & Allied Branches',
-  'Other Degree / Engineering Branch',
+  'CSD (Computer Science & Data Science)',
+  'CSM (Computer Science & AI/ML)',
+  'CSC (Computer Science & Cyber Security)',
+  'ECE (Electronics & Communication Engineering)',
+  'EEE (Electrical & Electronics Engineering)',
+  'Mech (Mechanical Engineering)',
+  'Civil (Civil Engineering)',
+  'Other',
 ];
 
 const YEAR_OPTIONS = [
-  '1st Year (Fresher)',
-  '2nd Year (Sophomore)',
-  '3rd Year (Junior)',
-  '4th Year (Final Year)',
-  'Postgraduate / Other',
+  '1st Year',
+  '2nd Year',
+  '3rd Year',
+  '4th Year',
 ];
 
 export const Step1Details = ({ formData, updateFormData, onNext }) => {
