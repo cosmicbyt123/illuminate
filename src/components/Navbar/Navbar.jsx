@@ -24,7 +24,7 @@ export const Navbar = ({ onRegisterClick }) => {
       <header
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
           isScrolled || location.pathname !== '/'
-            ? 'py-3 bg-[#070314]/85 backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-black/40'
+            ? 'py-3 bg-[#070314]/90 backdrop-blur-md md:backdrop-blur-xl border-b border-purple-500/20 shadow-lg shadow-black/40'
             : 'py-4 sm:py-5 bg-transparent border-b border-transparent'
         }`}
       >

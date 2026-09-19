@@ -19,7 +19,7 @@ export const MobileBottomDock = () => {
       aria-label="Mobile Navigation Dock"
       className="fixed bottom-3 left-2.5 right-2.5 z-50 md:hidden max-w-sm mx-auto"
     >
-      <div className="rounded-2xl bg-[#09041a]/95 backdrop-blur-2xl border border-purple-500/35 px-1.5 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85)] shadow-purple-950/50 flex items-center justify-between gap-1 overflow-hidden">
+      <div className="rounded-2xl bg-[#0a051d]/96 backdrop-blur-md border border-purple-500/35 px-1.5 py-1.5 shadow-[0_12px_40px_rgba(0,0,0,0.85)] shadow-purple-950/50 flex items-center justify-between gap-1 overflow-hidden">
         {DOCK_ITEMS.map((item) => {
           const isActive = location.pathname === item.href;
           const Icon = item.icon;

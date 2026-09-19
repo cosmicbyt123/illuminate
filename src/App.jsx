@@ -54,8 +54,8 @@ export function App() {
   return (
     <div className="min-h-screen bg-[#05020c] text-slate-100 selection:bg-purple-600 selection:text-white relative flex flex-col justify-between overflow-x-hidden">
       <ScrollToTop />
-      {/* Global Animated Cosmic Background */}
-      <AnimatedBackground />
+      {/* Global Animated Cosmic Background (Paused during preloader to eliminate GPU contention) */}
+      <AnimatedBackground isPaused={showPreloader} />
 
       <AnimatePresence>
         {showPreloader && (

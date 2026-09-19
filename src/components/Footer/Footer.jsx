@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ExternalLink, ShieldCheck, Heart } from 'lucide-react';
 import SITE_DATA from '../../data/site';
 import CONTACT_DATA from '../../data/contact';
@@ -8,9 +9,11 @@ export const Footer = () => {
   const [legalModal, setLegalModal] = useState(null); // 'terms' | 'privacy' | 'conduct' | null
 
   const handleScrollTo = (e, href) => {
-    e.preventDefault();
-    const el = document.querySelector(href);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    if (href && href.startsWith('#')) {
+      e.preventDefault();
+      const el = document.querySelector(href);
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
   };
 
   return (
@@ -70,23 +73,21 @@ export const Footer = () => {
               <ul className="space-y-2.5">
                 {SITE_DATA.navLinks.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      onClick={(e) => handleScrollTo(e, link.href)}
+                    <Link
+                      to={link.href}
                       className="text-slate-300 hover:text-white transition-colors block py-0.5"
                     >
                       {link.label}
-                    </a>
+                    </Link>
                   </li>
                 ))}
                 <li>
-                  <a
-                    href="#register"
-                    onClick={(e) => handleScrollTo(e, '#register')}
+                  <Link
+                    to="/register"
                     className="text-amber-400 hover:text-amber-300 font-semibold transition-colors block py-0.5"
                   >
                     Register Seat
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

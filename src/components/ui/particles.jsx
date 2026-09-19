@@ -27,6 +27,7 @@ export function Particles({
   particleCount = 12000,
   particleSize = 20,
   animate = true,
+  isPaused = false,
   className = "",
 }) {
   const mountRef = useRef(null);
@@ -34,6 +35,8 @@ export function Particles({
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
+
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
 
     let camera;
     let scene;
@@ -47,16 +50,23 @@ export function Particles({
     let driftY = 0;
     let driftX = 0;
     let renderer;
+    let isTabVisible = typeof document !== "undefined" ? !document.hidden : true;
 
-    // Generate high-resolution circular particle texture with soft glowing aura
+    // Mobile: clean, crisp, ultra-efficient 500 stars. Desktop: full 12,000–14,000 stars.
+    const effectiveCount = isMobile ? Math.min(particleCount, 520) : particleCount;
+    const effectiveSize = isMobile ? Math.min(particleSize, 14) : particleSize;
+
+    // Generate circular particle texture with soft glowing aura (smaller texture for mobile)
     const createCircleTexture = () => {
       const canvas = document.createElement("canvas");
-      canvas.width = 128;
-      canvas.height = 128;
+      const dim = isMobile ? 64 : 128;
+      const half = dim / 2;
+      canvas.width = dim;
+      canvas.height = dim;
       const ctx = canvas.getContext("2d");
       if (!ctx) return null;
 
-      const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+      const grad = ctx.createRadialGradient(half, half, 0, half, half, half);
       grad.addColorStop(0, "rgba(255, 255, 255, 1)");
       grad.addColorStop(0.2, "rgba(255, 255, 255, 0.9)");
       grad.addColorStop(0.45, "rgba(255, 255, 255, 0.45)");
@@ -65,7 +75,7 @@ export function Particles({
 
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(64, 64, 64, 0, Math.PI * 2);
+      ctx.arc(half, half, half, 0, Math.PI * 2);
       ctx.fill();
 
       return new THREE.CanvasTexture(canvas);
@@ -86,7 +96,7 @@ export function Particles({
 
       const singleColor = color ? new THREE.Color(color) : null;
 
-      for (let i = 0; i < particleCount; i++) {
+      for (let i = 0; i < effectiveCount; i++) {
         // Broad 3D volume distribution
         vertices.push(
           (Math.random() - 0.5) * 3200,
@@ -110,25 +120,27 @@ export function Particles({
 
       const sprite = createCircleTexture();
       material = new THREE.PointsMaterial({
-        size: particleSize,
+        size: effectiveSize,
         sizeAttenuation: true,
         map: sprite,
         transparent: true,
         vertexColors: true,
         blending: THREE.AdditiveBlending, // Radiant cosmic glow over dark background
         depthWrite: false,
-        opacity: 0.9,
+        opacity: isMobile ? 0.85 : 0.9,
       });
 
       particles = new THREE.Points(geometry, material);
       scene.add(particles);
 
       renderer = new THREE.WebGLRenderer({
-        antialias: true,
+        antialias: !isMobile, // Desktop keeps antialias; mobile saves critical GPU fillrate
         alpha: true,
-        powerPreference: "high-performance",
+        powerPreference: isMobile ? "default" : "high-performance",
+        precision: isMobile ? "mediump" : "highp",
       });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      // Desktop keeps full pixel ratio; mobile capped at 1.0 for buttery 60fps
+      renderer.setPixelRatio(isMobile ? 1.0 : Math.min(window.devicePixelRatio || 1, 2));
       renderer.setSize(width, height);
       container.appendChild(renderer.domElement);
 
@@ -144,51 +156,67 @@ export function Particles({
       renderer.setSize(width, height);
     };
 
-    // Highly responsive pointer & touch interaction
+    // Desktop only: highly responsive pointer interaction with 3D parallax
     const handlePointerMove = (event) => {
-      const clientX = event.touches ? event.touches[0].clientX : event.clientX;
-      const clientY = event.touches ? event.touches[0].clientY : event.clientY;
-      // High-sensitivity multiplier for dramatic reactive 3D parallax
-      targetMouseX = (clientX - window.innerWidth / 2) * 1.65;
-      targetMouseY = (clientY - window.innerHeight / 2) * 1.65;
+      targetMouseX = (event.clientX - window.innerWidth / 2) * 1.65;
+      targetMouseY = (event.clientY - window.innerHeight / 2) * 1.65;
+    };
+
+    const handleVisibilityChange = () => {
+      isTabVisible = !document.hidden;
     };
 
     const animateScene = () => {
       if (!camera || !scene || !renderer || !material || !particles) return;
 
-      // Ultra-smooth spring-damped tracking
-      mouseX += (targetMouseX - mouseX) * 0.065;
-      mouseY += (targetMouseY - mouseY) * 0.065;
+      if (!isPaused && isTabVisible) {
+        if (!isMobile) {
+          // Desktop: Ultra-smooth spring-damped tracking & cursor-guided 3D perspective
+          mouseX += (targetMouseX - mouseX) * 0.065;
+          mouseY += (targetMouseY - mouseY) * 0.065;
 
-      // Dynamic 3D Camera Parallax & Cursor-Guided Perspective
-      camera.position.x = mouseX * 0.75;
-      camera.position.y = -mouseY * 0.75;
+          camera.position.x = mouseX * 0.75;
+          camera.position.y = -mouseY * 0.75;
 
-      // Subtle dynamic 3D depth warp when moving cursor rapidly
-      const mouseSpeed = Math.hypot(targetMouseX - mouseX, targetMouseY - mouseY);
-      camera.position.z = 1000 - Math.min(mouseSpeed * 0.18, 160);
-      camera.lookAt(scene.position);
+          const mouseSpeed = Math.hypot(targetMouseX - mouseX, targetMouseY - mouseY);
+          camera.position.z = 1000 - Math.min(mouseSpeed * 0.18, 160);
+          camera.lookAt(scene.position);
 
-      // Continuous subtle cosmic rotation + reactive cursor tilt
-      driftY += 0.0004;
-      driftX += 0.0002;
-      particles.rotation.y = driftY + mouseX * 0.00065;
-      particles.rotation.x = driftX - mouseY * 0.00065;
+          driftY += 0.0004;
+          driftX += 0.0002;
+          particles.rotation.y = driftY + mouseX * 0.00065;
+          particles.rotation.x = driftX - mouseY * 0.00065;
+        } else {
+          // Mobile: Pure, lightweight cosmic drift with zero camera fighting native scroll
+          driftY += 0.0003;
+          driftX += 0.00015;
+          particles.rotation.y = driftY;
+          particles.rotation.x = driftX;
+        }
 
-      renderer.render(scene, camera);
+        renderer.render(scene, camera);
+      }
+
       animationFrameId = requestAnimationFrame(animateScene);
     };
 
     renderer = init();
     window.addEventListener("resize", handleResize);
-    window.addEventListener("mousemove", handlePointerMove, { passive: true });
-    window.addEventListener("touchmove", handlePointerMove, { passive: true });
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    // Only attach mousemove on desktop / fine pointer devices (never on mobile touch)
+    if (!isMobile && window.matchMedia("(pointer: fine)").matches) {
+      window.addEventListener("mousemove", handlePointerMove, { passive: true });
+    }
+
     animateScene();
 
     return () => {
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handlePointerMove);
-      window.removeEventListener("touchmove", handlePointerMove);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      if (!isMobile) {
+        window.removeEventListener("mousemove", handlePointerMove);
+      }
       cancelAnimationFrame(animationFrameId);
 
       if (renderer) {
@@ -200,7 +228,7 @@ export function Particles({
 
       if (material) material.dispose();
     };
-  }, [color, particleCount, particleSize, animate]);
+  }, [color, particleCount, particleSize, animate, isPaused]);
 
   return (
     <div

@@ -84,10 +84,12 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
           variants={heroVariants}
           className="relative z-10 mb-6 sm:mb-12 w-full max-w-5xl px-2 sm:px-4 flex justify-center"
         >
+          {/* Hardware-accelerated ambient glow behind logo for smooth mobile scrolling */}
+          <div className="absolute inset-0 max-w-[280px] mx-auto rounded-full bg-purple-600/18 blur-xl pointer-events-none sm:hidden" />
           <img 
             src="/assets/logos/illuminate-hero-logo.png" 
             alt="Illuminate 2026 - Empowering the next generation of Changemakers" 
-            className="w-auto h-28 sm:h-44 md:h-56 lg:h-64 xl:h-72 max-w-[88vw] object-contain drop-shadow-[0_0_45px_rgba(168,85,247,0.45)] contrast-[1.06] brightness-[1.02] select-none transition-transform duration-300 hover:scale-[1.02]"
+            className="relative z-10 w-auto h-28 sm:h-44 md:h-56 lg:h-64 xl:h-72 max-w-[88vw] object-contain drop-shadow-none sm:drop-shadow-[0_0_45px_rgba(168,85,247,0.45)] sm:contrast-[1.06] sm:brightness-[1.02] select-none transition-transform duration-300 hover:scale-[1.02]"
           />
           <h1 className="sr-only">Illuminate 2026 - Empowering The Next Generation of Changemakers</h1>
         </motion.div>

@@ -38,7 +38,7 @@ const ParallaxText = ({ children, baseVelocity = 100 }) => {
   return (
     <div className="overflow-hidden whitespace-nowrap flex flex-nowrap leading-none tracking-[-0.02em] py-4 sm:py-6 relative z-0">
       <motion.div
-        className="flex whitespace-nowrap font-extrabold text-5xl sm:text-7xl lg:text-8xl uppercase text-transparent bg-clip-text font-outline-2 drop-shadow-sm opacity-20"
+        className="flex whitespace-nowrap font-extrabold text-5xl sm:text-7xl lg:text-8xl uppercase text-transparent bg-clip-text font-outline-2 drop-shadow-sm opacity-20 will-change-transform"
         style={{ x, WebkitTextStroke: '1.5px rgba(168,85,247,0.3)' }}
       >
         <span className="block mr-12">{children}</span>
