@@ -26,9 +26,11 @@ export function TextFlippingBoard({
     let tickCount = 0;
     const startTime = performance.now();
 
-    // User requested: Scramble for ~1.3s first, then decrypt fast
-    const SCRAMBLE_DELAY_MS = 1300; 
-    const CHAR_LOCK_INTERVAL_MS = 16; // Fast decryption cascade
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    // Desktop: Original 1.3s scramble delay. Mobile: Ultra-snappy 180ms decryption
+    const SCRAMBLE_DELAY_MS = isMobile ? 180 : 1300; 
+    const CHAR_LOCK_INTERVAL_MS = isMobile ? 12 : 16; // Fast decryption cascade
 
     let cumulativeCharIndex = 0;
     const charLockTimes = {};
@@ -43,12 +45,14 @@ export function TextFlippingBoard({
     });
 
     const totalDuration =
-      SCRAMBLE_DELAY_MS + cumulativeCharIndex * CHAR_LOCK_INTERVAL_MS + 60;
+      SCRAMBLE_DELAY_MS + cumulativeCharIndex * CHAR_LOCK_INTERVAL_MS + (isMobile ? 40 : 60);
 
-    const lockedClass =
-      "inline-block font-mono text-white font-black drop-shadow-[0_0_12px_rgba(255,255,255,0.9),0_0_24px_rgba(192,132,252,0.5)] transition-colors duration-75";
-    const scrambleClass =
-      "inline-block font-mono text-purple-300/85 font-bold drop-shadow-[0_0_10px_rgba(192,132,252,0.7)]";
+    const lockedClass = isMobile
+      ? "inline-block font-mono text-white font-black transition-colors duration-75"
+      : "inline-block font-mono text-white font-black drop-shadow-[0_0_12px_rgba(255,255,255,0.9),0_0_24px_rgba(192,132,252,0.5)] transition-colors duration-75";
+    const scrambleClass = isMobile
+      ? "inline-block font-mono text-purple-300 font-bold opacity-85"
+      : "inline-block font-mono text-purple-300/85 font-bold drop-shadow-[0_0_10px_rgba(192,132,252,0.7)]";
 
     const tick = (now) => {
       const elapsed = now - startTime;
@@ -143,7 +147,7 @@ export function TextFlippingBoard({
                     ref={(el) => {
                       if (el) spanRefs.current[`${lineIdx}-${charIdx}`] = el;
                     }}
-                    className="inline-block font-mono text-purple-300/85 font-bold drop-shadow-[0_0_10px_rgba(192,132,252,0.7)]"
+                    className="inline-block font-mono text-purple-300 font-bold opacity-85 sm:drop-shadow-[0_0_10px_rgba(192,132,252,0.7)]"
                   >
                     {GLYPHS[Math.floor(Math.random() * GLYPHS.length)]}
                   </span>

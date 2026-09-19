@@ -5,32 +5,57 @@ import { TextFlippingBoard } from '@/components/ui/text-flipping-board';
 const INTRO_COPY = "START YOUR\nENTREPRENEURSHIP\nJOURNEY";
 
 /**
- * Cinematic "Door of Light" Preloader
+ * Cinematic Preloader
  *
- * Exact composition matching user reference:
+ * Desktop: Full cinematic experience matching original:
  * - Glowing white vertical door capsule with light stem & purple radial aura
  * - E-CELL • RAGHU ENGINEERING COLLEGE amber-dot pill badge
- * - The Terminal Board with "2 up, 2 down" wave animation (no matrix grid boxes)
+ * - Terminal Board with "2 up, 2 down" wave animation
  * - START TO BEGIN → button with soft glow
- * - Entering door animation: door expands smoothly, flooding the screen with light into the site.
+ * - Entering door animation: door expands smoothly, flooding the screen with light into the site (850ms).
+ *
+ * Mobile (Option B):
+ * - Auto-fade in 1 second into the website
+ * - Clean, crisp typography (zero GPU/CPU overhead)
+ * - No button, no white screen zoom
  */
 export const CinematicPreloader = ({ onComplete }) => {
   const [isEntering, setIsEntering] = useState(false);
   const reduceMotion = useReducedMotion();
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined' ? window.innerWidth < 768 : false
+  );
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check, { passive: true });
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   useEffect(() => {
     if (reduceMotion) {
       onComplete?.();
+      return;
     }
-  }, [reduceMotion, onComplete]);
 
+    // Option B for mobile: Auto-fade in 1 second with clean typography
+    if (isMobile) {
+      const autoFadeTimer = setTimeout(() => {
+        onComplete?.();
+      }, 1000);
+
+      return () => clearTimeout(autoFadeTimer);
+    }
+  }, [reduceMotion, isMobile, onComplete]);
+
+  // Desktop only: handles user click on "Start to Begin"
   const handleEnter = (e) => {
     e?.preventDefault?.();
     e?.stopPropagation?.();
     if (isEntering) return;
     setIsEntering(true);
 
-    // Duration of the zoom through the door: exact 850ms matching original
     const completeTimer = setTimeout(() => {
       onComplete?.();
     }, 850);
@@ -53,7 +78,7 @@ export const CinematicPreloader = ({ onComplete }) => {
       }`}
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
+      transition={{ duration: isMobile ? 0.35 : 0.6, ease: 'easeOut' }}
     >
       {/* Floating Background Stars / Stardust */}
       <div className="absolute inset-0 pointer-events-none z-0" aria-hidden="true">
@@ -81,7 +106,7 @@ export const CinematicPreloader = ({ onComplete }) => {
         SKIP &rarr;
       </button>
 
-      {/* PHASE 1: Terminal Intro Content Stack (Fades out when user clicks enter) */}
+      {/* Intro Content Stack */}
       <motion.div
         className="relative z-20 flex flex-col items-center justify-center w-full max-w-3xl px-2.5 sm:px-6 py-6 text-center my-auto"
         animate={
@@ -102,38 +127,65 @@ export const CinematicPreloader = ({ onComplete }) => {
           <span className="text-purple-200">RAGHU ENGINEERING COLLEGE</span>
         </div>
 
-        {/* 2. Floating "2 Up, 2 Down" Wave Typography (Pure Floating Text, No Terminal UI) */}
-        <div className="w-full max-w-3xl px-2 mb-6 sm:mb-9">
-          <TextFlippingBoard text={INTRO_COPY} />
-        </div>
-
-        {/* 3. Action CTA Button (Triggers entry & gate reveal) */}
-        <div>
-          <button
-            type="button"
-            onClick={handleEnter}
-            className="group relative inline-flex items-center gap-2 sm:gap-2.5 px-7 sm:px-10 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase text-slate-950 bg-gradient-to-r from-purple-100 via-white to-purple-200 hover:from-white hover:to-white shadow-[0_0_25px_rgba(192,132,252,0.4),0_0_50px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto"
-          >
-            <span className="font-extrabold tracking-widest">Start to Begin</span>
-            <svg
-              className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-950 transition-transform duration-300 group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2.5}
-                d="M13 7l5 5m0 0l-5 5m5-5H6"
+        {/* 2. Typography: Clean on Mobile, Scramble on Desktop */}
+        {isMobile ? (
+          /* Mobile Option B: Clean typography, zero GPU/CPU lag */
+          <div className="w-full max-w-sm px-4 mb-2 flex flex-col items-center justify-center gap-1.5 font-mono text-center select-none">
+            <span className="text-xs min-[360px]:text-sm font-extrabold tracking-[0.18em] text-purple-300 uppercase">
+              START YOUR
+            </span>
+            <span className="text-base min-[360px]:text-lg min-[400px]:text-xl font-black tracking-[0.12em] text-white uppercase drop-shadow-[0_2px_12px_rgba(168,85,247,0.45)]">
+              ENTREPRENEURSHIP
+            </span>
+            <span className="text-xs min-[360px]:text-sm font-extrabold tracking-[0.22em] text-purple-300 uppercase">
+              JOURNEY
+            </span>
+            {/* 1-Second Smooth Progress Glow Line */}
+            <div className="w-28 h-0.5 rounded-full bg-purple-950/80 border border-purple-500/25 overflow-hidden mt-4">
+              <motion.div
+                className="h-full bg-gradient-to-r from-purple-500 via-white to-purple-300 rounded-full"
+                initial={{ width: '0%' }}
+                animate={{ width: '100%' }}
+                transition={{ duration: 1.0, ease: 'linear' }}
               />
-            </svg>
-          </button>
-        </div>
+            </div>
+          </div>
+        ) : (
+          /* Desktop: Full Original Floating Wave Scramble Board */
+          <div className="w-full max-w-3xl px-2 mb-6 sm:mb-9">
+            <TextFlippingBoard text={INTRO_COPY} />
+          </div>
+        )}
+
+        {/* 3. Action CTA Button (Desktop only - no button on mobile) */}
+        {!isMobile && (
+          <div>
+            <button
+              type="button"
+              onClick={handleEnter}
+              className="group relative inline-flex items-center gap-2 sm:gap-2.5 px-7 sm:px-10 py-3 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm tracking-widest uppercase text-slate-950 bg-gradient-to-r from-purple-100 via-white to-purple-200 hover:from-white hover:to-white shadow-[0_0_25px_rgba(192,132,252,0.4),0_0_50px_rgba(255,255,255,0.25)] hover:scale-105 active:scale-95 transition-all duration-300 cursor-pointer pointer-events-auto"
+            >
+              <span className="font-extrabold tracking-widest">Start to Begin</span>
+              <svg
+                className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-950 transition-transform duration-300 group-hover:translate-x-1"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M13 7l5 5m0 0l-5 5m5-5H6"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
       </motion.div>
 
-      {/* PHASE 2: Glowing Gate of Light - Appears at center on enter, zooms with exact original speed */}
-      {isEntering && (
+      {/* PHASE 2: Glowing Gate of Light - Desktop Only (No white screen zoom on mobile) */}
+      {!isMobile && isEntering && (
         <motion.div
           className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-4"
           initial={{ opacity: 1, scale: 1 }}
@@ -149,7 +201,7 @@ export const CinematicPreloader = ({ onComplete }) => {
           {/* Volumetric Purple Ambient Bloom */}
           <div className="absolute w-[340px] sm:w-[500px] h-[500px] sm:h-[640px] rounded-full bg-gradient-to-tr from-purple-700/20 via-violet-500/25 to-transparent blur-[85px] pointer-events-none" />
 
-          {/* Vertical Glowing Gate Capsule (Clean rounded capsule, no tail) */}
+          {/* Vertical Glowing Gate Capsule */}
           <div className="relative w-16 sm:w-20 md:w-24 h-64 sm:h-80 md:h-[400px] rounded-[9999px] bg-white shadow-[0_0_40px_#ffffff,0_0_80px_#c084fc] flex items-center justify-center overflow-hidden">
             {/* Intense inner core */}
             <div className="w-1/2 h-full bg-white shadow-[0_0_20px_#ffffff] z-10" />

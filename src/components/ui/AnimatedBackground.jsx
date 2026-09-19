@@ -1,10 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { Particles } from './particles';
 
+// Curated 20 twinkling cosmic stars for mobile (Pure GPU CSS, 0% JS/canvas overhead)
+const MOBILE_STARS = [
+  { top: '6%', left: '18%', size: 2, color: '#c084fc', delay: '0s', dur: '3.2s' },
+  { top: '11%', left: '82%', size: 2.5, color: '#ffffff', delay: '1.2s', dur: '4s' },
+  { top: '16%', left: '44%', size: 1.5, color: '#a855f7', delay: '0.5s', dur: '2.6s' },
+  { top: '22%', left: '90%', size: 3, color: '#38bdf8', delay: '2s', dur: '3.8s' },
+  { top: '27%', left: '12%', size: 2, color: '#fbbf24', delay: '0.8s', dur: '3.2s' },
+  { top: '34%', left: '65%', size: 2, color: '#ffffff', delay: '1.6s', dur: '4.5s' },
+  { top: '41%', left: '24%', size: 2.5, color: '#c084fc', delay: '2.2s', dur: '3.1s' },
+  { top: '47%', left: '85%', size: 1.5, color: '#ffffff', delay: '0.3s', dur: '2.8s' },
+  { top: '53%', left: '38%', size: 3, color: '#a855f7', delay: '1.8s', dur: '3.9s' },
+  { top: '61%', left: '72%', size: 2, color: '#fbbf24', delay: '0.9s', dur: '3.4s' },
+  { top: '67%', left: '15%', size: 1.5, color: '#38bdf8', delay: '2.5s', dur: '4.1s' },
+  { top: '74%', left: '88%', size: 2.5, color: '#ffffff', delay: '1.1s', dur: '3.6s' },
+  { top: '81%', left: '50%', size: 2, color: '#c084fc', delay: '0.7s', dur: '2.9s' },
+  { top: '87%', left: '22%', size: 2, color: '#ffffff', delay: '1.9s', dur: '4.3s' },
+  { top: '93%', left: '78%', size: 1.5, color: '#a855f7', delay: '0.4s', dur: '3.2s' },
+  { top: '14%', left: '94%', size: 2, color: '#ffffff', delay: '2.1s', dur: '3.7s' },
+  { top: '30%', left: '32%', size: 1.5, color: '#fbbf24', delay: '1.4s', dur: '3.3s' },
+  { top: '50%', left: '10%', size: 2.5, color: '#c084fc', delay: '0.6s', dur: '4.2s' },
+  { top: '70%', left: '58%', size: 2, color: '#ffffff', delay: '2.3s', dur: '3.5s' },
+  { top: '84%', left: '92%', size: 1.5, color: '#38bdf8', delay: '1.7s', dur: '3s' },
+];
+
 /**
  * Ultra-Smooth High Performance Animated Cosmic Background
- * Desktop: Full interactive 3D 14,000 Three.js particles with mouse tracking
- * Mobile: Hardware-accelerated Cosmic Aurora Nebula (Zero JS overhead, locked 120 FPS)
+ * Desktop: Full interactive 3D 14,000 Three.js particles with mouse tracking & Aurora Orbs
+ * Mobile: Pure GPU CSS Aurora Mesh & Twinkling Starlight (0% WebGL, 0% JS, Locked 120 FPS)
  */
 export const AnimatedBackground = ({ isPaused = false }) => {
   const [isDesktop, setIsDesktop] = useState(() =>
@@ -26,55 +50,68 @@ export const AnimatedBackground = ({ isPaused = false }) => {
       aria-hidden="true"
     >
       {/* Desktop Only: High-density 14,000 3D Three.js Particles */}
-      {isDesktop && (
+      {isDesktop ? (
         <Particles
           particleCount={14000}
           particleSize={22}
           isPaused={isPaused}
           className="z-0 opacity-95"
         />
+      ) : (
+        /* Mobile Only: Zero-Overhead Hardware-Accelerated Starlight & Aurora Mesh */
+        <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
+          {/* Static Ambient Aurora Gradients - Zero continuous GPU recalculation */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              background: `
+                radial-gradient(ellipse 90% 55% at 50% -5%, rgba(168, 85, 247, 0.22), transparent 70%),
+                radial-gradient(ellipse 65% 45% at 90% 35%, rgba(56, 189, 248, 0.12), transparent 60%),
+                radial-gradient(ellipse 70% 50% at 10% 65%, rgba(192, 132, 252, 0.15), transparent 65%)
+              `
+            }}
+          />
+          {MOBILE_STARS.map((star, i) => (
+            <span
+              key={i}
+              className="absolute rounded-full animate-pulse pointer-events-none will-change-transform"
+              style={{
+                top: star.top,
+                left: star.left,
+                width: `${star.size}px`,
+                height: `${star.size}px`,
+                backgroundColor: star.color,
+                boxShadow: `0 0 ${star.size * 2.5}px ${star.color}`,
+                animationDelay: star.delay,
+                animationDuration: star.dur,
+              }}
+            />
+          ))}
+        </div>
       )}
 
-      {/* Mobile Only: Electric Cyber Lighting Beams & Core Glow (0% JS, Pure 120 FPS GPU) */}
-      {!isDesktop && (
+      {/* Desktop Aurora Orbs (Preserved 100% for desktop) */}
+      {isDesktop && (
         <>
-          {/* Sweeping Electric Cyber Beam 1 */}
+          {/* Aurora Orb 1: Upper Violet Aurora */}
           <div
-            className="absolute -top-20 -left-12 w-28 h-[130vh] bg-gradient-to-b from-transparent via-purple-500/20 via-cyan-400/15 to-transparent blur-2xl animate-beam-slow pointer-events-none will-change-transform"
+            className="absolute -top-32 left-1/4 w-[700px] h-[700px] rounded-full bg-gradient-to-br from-purple-700/20 via-violet-600/12 to-transparent blur-[40px] pointer-events-none will-change-transform"
             style={{ transform: 'translate3d(0,0,0)' }}
           />
 
-          {/* Sweeping Electric Cyber Beam 2 */}
+          {/* Aurora Orb 2: Right Indigo Wave */}
           <div
-            className="absolute -top-10 -right-12 w-24 h-[130vh] bg-gradient-to-b from-transparent via-violet-500/18 via-pink-500/10 to-transparent blur-2xl animate-beam-reverse pointer-events-none will-change-transform"
+            className="absolute top-1/3 -right-32 w-[620px] h-[620px] rounded-full bg-gradient-to-tl from-indigo-700/18 via-purple-900/15 to-transparent blur-[40px] pointer-events-none will-change-transform"
             style={{ transform: 'translate3d(0,0,0)' }}
           />
 
-          {/* Central Breathing Electric Spotlight */}
+          {/* Aurora Orb 3: Lower Left Amber/Rose Whisper */}
           <div
-            className="absolute top-1/4 left-1/2 w-80 h-80 rounded-full bg-gradient-to-r from-purple-600/25 via-cyan-500/12 to-pink-500/15 blur-3xl animate-electric-pulse pointer-events-none will-change-transform"
-            style={{ transform: 'translate3d(-50%, 0, 0)' }}
+            className="absolute bottom-1/4 -left-28 w-[520px] h-[520px] rounded-full bg-gradient-to-tr from-amber-500/08 via-purple-600/08 to-transparent blur-[40px] pointer-events-none will-change-transform"
+            style={{ transform: 'translate3d(0,0,0)' }}
           />
         </>
       )}
-
-      {/* Aurora Orb 1: Upper Violet Aurora (Hardware accelerated float) */}
-      <div
-        className="absolute -top-32 left-1/4 w-[320px] sm:w-[700px] h-[320px] sm:h-[700px] rounded-full bg-gradient-to-br from-purple-700/20 via-violet-600/12 to-transparent blur-[25px] sm:blur-[40px] pointer-events-none will-change-transform"
-        style={{ transform: 'translate3d(0,0,0)' }}
-      />
-
-      {/* Aurora Orb 2: Right Indigo Wave */}
-      <div
-        className="absolute top-1/3 -right-32 w-[300px] sm:w-[620px] h-[300px] sm:h-[620px] rounded-full bg-gradient-to-tl from-indigo-700/18 via-purple-900/15 to-transparent blur-[25px] sm:blur-[40px] pointer-events-none will-change-transform"
-        style={{ transform: 'translate3d(0,0,0)' }}
-      />
-
-      {/* Aurora Orb 3: Lower Left Amber/Rose Whisper */}
-      <div
-        className="absolute bottom-1/4 -left-28 w-[260px] sm:w-[520px] h-[260px] sm:h-[520px] rounded-full bg-gradient-to-tr from-amber-500/08 via-purple-600/08 to-transparent blur-[25px] sm:blur-[40px] pointer-events-none will-change-transform"
-        style={{ transform: 'translate3d(0,0,0)' }}
-      />
 
       {/* Cyber Perspective Grid Overlay */}
       <div
