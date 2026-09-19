@@ -161,6 +161,72 @@
   will-change: transform;
 }
 
+/* Hardware-Accelerated Mobile Marquee (Runs directly on GPU compositor thread) */
+@keyframes marqueeMobile {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee-mobile {
+  display: flex;
+  width: max-content;
+  animation: marqueeMobile 22s linear infinite;
+  will-change: transform;
+}
+
+/* Hardware-Accelerated Mobile Electric Cyber Light Beams */
+@keyframes beamSlow {
+  0%, 100% {
+    transform: translate3d(0, -5%, 0) rotate(14deg);
+    opacity: 0.45;
+  }
+  50% {
+    transform: translate3d(35px, 8%, 0) rotate(18deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes beamReverse {
+  0%, 100% {
+    transform: translate3d(0, 8%, 0) rotate(-14deg);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translate3d(-30px, -6%, 0) rotate(-18deg);
+    opacity: 0.75;
+  }
+}
+
+@keyframes electricPulse {
+  0%, 100% {
+    transform: translate3d(-50%, 0, 0) scale(1);
+    opacity: 0.55;
+  }
+  50% {
+    transform: translate3d(-50%, 0, 0) scale(1.18);
+    opacity: 0.9;
+  }
+}
+
+.animate-beam-slow {
+  animation: beamSlow 8s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-beam-reverse {
+  animation: beamReverse 10s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+.animate-electric-pulse {
+  animation: electricPulse 5.5s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
 /* Reduced motion support */
 @media (prefers-reduced-motion: reduce) {
   *,

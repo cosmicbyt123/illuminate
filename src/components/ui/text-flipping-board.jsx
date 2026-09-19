@@ -26,9 +26,9 @@ export function TextFlippingBoard({
     let tickCount = 0;
     const startTime = performance.now();
 
-    // Fast, crisp cyberpunk decryption cascade (~450ms total)
-    const SCRAMBLE_DELAY_MS = 180; 
-    const CHAR_LOCK_INTERVAL_MS = 12; // Snappy cascade
+    // User requested: Scramble for ~1.3s first, then decrypt fast
+    const SCRAMBLE_DELAY_MS = 1300; 
+    const CHAR_LOCK_INTERVAL_MS = 16; // Fast decryption cascade
 
     let cumulativeCharIndex = 0;
     const charLockTimes = {};
@@ -43,12 +43,12 @@ export function TextFlippingBoard({
     });
 
     const totalDuration =
-      SCRAMBLE_DELAY_MS + cumulativeCharIndex * CHAR_LOCK_INTERVAL_MS + 40;
+      SCRAMBLE_DELAY_MS + cumulativeCharIndex * CHAR_LOCK_INTERVAL_MS + 60;
 
     const lockedClass =
-      "inline-block font-mono text-white font-black transition-colors duration-75";
+      "inline-block font-mono text-white font-black drop-shadow-[0_0_12px_rgba(255,255,255,0.9),0_0_24px_rgba(192,132,252,0.5)] transition-colors duration-75";
     const scrambleClass =
-      "inline-block font-mono text-purple-300 font-bold opacity-85";
+      "inline-block font-mono text-purple-300/85 font-bold drop-shadow-[0_0_10px_rgba(192,132,252,0.7)]";
 
     const tick = (now) => {
       const elapsed = now - startTime;

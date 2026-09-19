@@ -37,6 +37,7 @@ export const EVENT_DATA = {
     upiId: "9391183459@ybl",
     qrCodeImage: "/assets/payment/qr-code.png",
     payeeName: "Illuminate REC",
+    whatsappGroupUrl: "https://chat.whatsapp.com/LtSa3ftDjZT7jmwGwK4nUM",
     instructions: "Scan the QR code using any UPI app (PhonePe, Google Pay, Paytm, BHIM) or pay via the UPI ID. Once completed, enter the 12-digit UTR and upload your payment screenshot."
   },
   stats: [

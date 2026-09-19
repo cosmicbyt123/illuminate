@@ -53,13 +53,33 @@ const ParallaxText = ({ children, baseVelocity = 100 }) => {
 };
 
 export const ScrollMarquee = () => {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <div className="w-full relative mt-4 mb-2 bg-transparent border-y border-purple-500/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.5)]">
       {/* Decorative Glow inside Marquee */}
       <div className="absolute inset-0 bg-gradient-to-r from-[#05020c] via-transparent to-[#05020c] z-10 pointer-events-none" />
-      <ParallaxText baseVelocity={2}>
-        ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •
-      </ParallaxText>
+
+      {isMobile ? (
+        /* Mobile: 100% Hardware-Accelerated CSS Marquee (0% JS/CPU overhead) */
+        <div className="overflow-hidden whitespace-nowrap flex leading-none py-3.5 relative z-0">
+          <div
+            className="flex whitespace-nowrap font-extrabold text-4xl uppercase text-transparent bg-clip-text font-outline-2 opacity-25 animate-marquee-mobile"
+            style={{ WebkitTextStroke: '1.5px rgba(168,85,247,0.35)' }}
+          >
+            <span className="block mr-8">ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •</span>
+            <span className="block mr-8">ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •</span>
+            <span className="block mr-8">ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •</span>
+            <span className="block mr-8">ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •</span>
+          </div>
+        </div>
+      ) : (
+        /* Desktop: 100% Original Framer Motion Spring & Velocity Marquee */
+        <ParallaxText baseVelocity={2}>
+          ILLUMINATE 2026 • ENTREPRENEURSHIP • MASTERCLASS • STARTUPS •
+        </ParallaxText>
+      )}
+
       <div className="absolute top-1/2 left-0 w-full h-[1px] bg-purple-500/5 -z-10" />
     </div>
   );

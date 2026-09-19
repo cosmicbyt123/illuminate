@@ -30,10 +30,10 @@ export const CinematicPreloader = ({ onComplete }) => {
     if (isEntering) return;
     setIsEntering(true);
 
-    // Fast, crisp cinematic door flash: 300ms
+    // Duration of the zoom through the door: exact 850ms matching original
     const completeTimer = setTimeout(() => {
       onComplete?.();
-    }, 300);
+    }, 850);
 
     return () => {
       clearTimeout(completeTimer);
@@ -132,23 +132,27 @@ export const CinematicPreloader = ({ onComplete }) => {
         </div>
       </motion.div>
 
-      {/* PHASE 2: Glowing Gate of Light - Snappy hyper-speed door flash */}
+      {/* PHASE 2: Glowing Gate of Light - Appears at center on enter, zooms with exact original speed */}
       {isEntering && (
         <motion.div
           className="absolute inset-0 z-30 flex flex-col items-center justify-center pointer-events-none px-4"
-          initial={{ opacity: 1, scale: 0.9 }}
+          initial={{ opacity: 1, scale: 1 }}
           animate={{
-            scale: [0.9, 2.2, 5],
-            opacity: [1, 0.85, 0],
+            scale: [1, 5, 25],
+            opacity: [1, 1, 1],
           }}
           transition={{
-            duration: 0.3,
-            ease: [0.22, 1, 0.36, 1],
+            duration: 0.8,
+            ease: [0.76, 0, 0.24, 1],
           }}
         >
-          {/* Vertical Glowing Gate Capsule */}
-          <div className="relative w-16 sm:w-20 md:w-24 h-64 sm:h-80 md:h-[400px] rounded-[9999px] bg-white shadow-[0_0_30px_#ffffff,0_0_50px_#c084fc] flex items-center justify-center overflow-hidden">
-            <div className="w-1/2 h-full bg-white z-10" />
+          {/* Volumetric Purple Ambient Bloom */}
+          <div className="absolute w-[340px] sm:w-[500px] h-[500px] sm:h-[640px] rounded-full bg-gradient-to-tr from-purple-700/20 via-violet-500/25 to-transparent blur-[85px] pointer-events-none" />
+
+          {/* Vertical Glowing Gate Capsule (Clean rounded capsule, no tail) */}
+          <div className="relative w-16 sm:w-20 md:w-24 h-64 sm:h-80 md:h-[400px] rounded-[9999px] bg-white shadow-[0_0_40px_#ffffff,0_0_80px_#c084fc] flex items-center justify-center overflow-hidden">
+            {/* Intense inner core */}
+            <div className="w-1/2 h-full bg-white shadow-[0_0_20px_#ffffff] z-10" />
           </div>
         </motion.div>
       )}
