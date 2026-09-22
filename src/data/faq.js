@@ -10,14 +10,9 @@ export const FAQ_DATA = [
     answer: "All undergraduate and postgraduate college students from any engineering branch (CSE, CSM, CSC, ECE, EEE, Mechanical, Civil, IoT, etc.) across 1st, 2nd, 3rd, and 4th years are welcome. No prior business experience or active startup is required."
   },
   {
-    id: "faq-2",
-    question: "When is the Early Bird registration deadline?",
-    answer: "The Early Bird pass is available for a limited duration until [ADD EARLY BIRD DEADLINE]. After this period, passes revert to the regular pricing. We recommend registering early to secure reserved seating."
-  },
-  {
     id: "faq-3",
     question: "How will my payment and registration be verified?",
-    answer: "Once you transfer the fee via the provided QR code or UPI ID, submit your 12-digit UPI UTR number and payment receipt screenshot in the registration portal. Our coordinator desk verifies the transaction ledger and dispatches a verified email confirmation."
+    answer: "Once you transfer the fee and submit your transaction details, our team will verify your payment and send a confirmation email with your pass within 12 hours. Please wait while your payment is being verified. If you face any issues, feel free to contact our coordinator desk at +91 79893 13442 or +91 93465 65707."
   },
   {
     id: "faq-4",

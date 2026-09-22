@@ -10,7 +10,6 @@ import Hero from './components/Hero/Hero';
 import ScrollMarquee from './components/ui/ScrollMarquee';
 import EventIntro from './components/EventIntro/EventIntro';
 import SpeakerSection from './components/Speaker/SpeakerSection';
-import RegistrationWizard from './components/Registration/RegistrationWizard';
 import FAQSection from './components/FAQ/FAQSection';
 import ContactSection from './components/Contact/ContactSection';
 import Footer from './components/Footer/Footer';
@@ -47,10 +46,6 @@ export function App() {
     setShowPreloader(false);
   };
 
-  const handleRegisterClick = () => {
-    navigate('/register');
-  };
-
   return (
     <div className="min-h-screen bg-[#05020c] text-slate-100 selection:bg-purple-600 selection:text-white relative flex flex-col justify-between overflow-x-hidden">
       <ScrollToTop />
@@ -64,7 +59,7 @@ export function App() {
       </AnimatePresence>
 
       {/* Floating Global Navbar */}
-      <Navbar onRegisterClick={handleRegisterClick} />
+      <Navbar />
 
       {/* Floating Mobile Bottom Thumb Dock (iOS / Threads Style) */}
       <MobileBottomDock />
@@ -84,13 +79,12 @@ export function App() {
             <Routes location={location}>
               <Route path="/" element={
                 <>
-                  <Hero onRegisterClick={handleRegisterClick} isReady={!showPreloader} />
+                  <Hero isReady={!showPreloader} />
                   <ScrollMarquee />
                 </>
               } />
               <Route path="/about" element={<EventIntro />} />
               <Route path="/speaker" element={<SpeakerSection />} />
-              <Route path="/register" element={<RegistrationWizard />} />
               <Route path="/faq" element={<FAQSection />} />
               <Route path="/contact" element={<ContactSection />} />
             </Routes>

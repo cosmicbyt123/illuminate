@@ -7,7 +7,6 @@ export const EVENT_DATA = {
   name: "ILLUMINATE 2026",
   tagline: "Empowering The Next Generation of Changemakers",
   badge: "National Entrepreneurship Flagship Initiative",
-  offerBadge: "EARLY BIRD OFFER ACTIVE",
   organizer: {
     name: "NEC Team, Entrepreneurship Cell",
     college: "Raghu Engineering College (Autonomous)",
@@ -19,25 +18,12 @@ export const EVENT_DATA = {
   dates: {
     display: "October 9 & 10, 2026",
     time: "09:30 AM - 04:00 PM",
-    duration: "2-Day Intensive Masterclass",
-    earlyBirdDeadline: "[ADD EARLY BIRD DEADLINE]"
+    duration: "2-Day Intensive Masterclass"
   },
   venue: {
     name: "Raghu Engineering College",
     address: "Raghu Engineering College, Dakamarri, Bheemunipatnam Mandal, Visakhapatnam, Andhra Pradesh 531162",
     mapUrl: "https://maps.google.com/?q=Raghu+Engineering+College+Visakhapatnam"
-  },
-  pricing: {
-    currency: "₹",
-    earlyBirdPrice: "₹699",
-    regularPrice: "[ADD REGULAR PRICE]",
-    includes: ["Official Certificate", "Delegate Kit & Manual", "Founder Masterclass", "Lunch & Refreshments"]
-  },
-  payment: {
-    upiId: "9391183459@ybl",
-    qrCodeImage: "/assets/payment/qr-code.png",
-    payeeName: "Illuminate REC",
-    instructions: "Scan the QR code using any UPI app (PhonePe, Google Pay, Paytm, BHIM) or pay via the UPI ID. Once completed, enter the 12-digit UTR and upload your payment screenshot."
   },
   stats: [
     { value: "50+", label: "Cities Nationwide" },

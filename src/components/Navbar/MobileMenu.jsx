@@ -85,19 +85,8 @@ export const MobileMenu = ({ isOpen, onClose, onRegisterClick }) => {
           ))}
         </nav>
 
-        {/* Institution Links & Register CTA */}
+        {/* Institution Links */}
         <div className="pt-6 border-t border-purple-900/40 space-y-4">
-          <button
-            type="button"
-            onClick={() => {
-              onClose();
-              if (onRegisterClick) onRegisterClick();
-            }}
-            className="w-full min-h-[50px] px-6 py-3 rounded-xl font-bold text-sm sm:text-base text-white bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 shadow-glow-sm flex items-center justify-center gap-2"
-          >
-            <span>Register Now</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
 
           <div className="flex items-center justify-between text-xs text-slate-400 pt-2 px-1">
             <a

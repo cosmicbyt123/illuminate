@@ -1,14 +1,14 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Info, Users, HelpCircle, Sparkles } from 'lucide-react';
+import { Home, Info, Users, HelpCircle, Headphones } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const DOCK_ITEMS = [
   { label: 'Home', href: '/', icon: Home },
-  { label: 'Register', href: '/register', icon: Sparkles, isPrimary: true },
   { label: 'About', href: '/about', icon: Info },
   { label: 'Speakers', href: '/speaker', icon: Users },
   { label: 'FAQ', href: '/faq', icon: HelpCircle },
+  { label: 'Contact', href: '/contact', icon: Headphones },
 ];
 
 export const MobileBottomDock = () => {

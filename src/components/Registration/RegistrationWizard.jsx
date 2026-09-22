@@ -100,15 +100,11 @@ export const RegistrationWizard = () => {
       <ScrollReveal>
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
-            <span>{EVENT_DATA.offerBadge}</span>
-          </div>
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Registration & <span className="gradient-text-electric">Verification</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-base mt-2 max-w-xl mx-auto">
-            Reserve your seat with the Early Bird pass ({EVENT_DATA.pricing.earlyBirdPrice}). Follow the guided 3-step verification below.
+            Reserve your delegate seat. Follow the guided verification steps below.
           </p>
         </div>
 

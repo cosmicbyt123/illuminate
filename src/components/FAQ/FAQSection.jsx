@@ -27,7 +27,7 @@ export const FAQSection = () => {
             Frequently Asked <span className="gradient-text-electric">Questions</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-base mt-2 max-w-xl mx-auto">
-            Clear answers regarding eligibility, early bird passes, credentials, and event mechanics.
+            Clear answers regarding eligibility, credentials, workshop schedule, and event mechanics.
           </p>
         </div>
       </ScrollReveal>

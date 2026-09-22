@@ -13,7 +13,7 @@ export const CONTACT_DATA = {
       title: "E-Cell IIT Bombay Representative",
       subtitle: "Events & Workshop Lead",
       designation: "E-Cell IIT Bombay Liaison",
-      email: "illuminate@ecell.in",
+      email: "ecellrec1@gmail.com",
       phone: null
     },
     {
@@ -44,7 +44,7 @@ export const CONTACT_DATA = {
     accreditation: "Accredited by NAAC with 'A+' Grade | Approved by AICTE, New Delhi",
     address: "Dakamarri, Bheemunipatnam Mandal, Visakhapatnam, Andhra Pradesh 531162",
     helpline: "+91 79893 13442 / +91 93465 65707",
-    email: "illuminate@ecell.in"
+    email: "ecellrec1@gmail.com"
   }
 };
 

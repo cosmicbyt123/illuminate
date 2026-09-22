@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Linkedin, Twitter, ChevronDown, Sparkles } from 'lucide-react';
+import { User, ChevronDown, Sparkles } from 'lucide-react';
 
 export const SpeakerCard = ({ speaker }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -64,35 +64,14 @@ export const SpeakerCard = ({ speaker }) => {
         </div>
       </div>
 
-      {/* Social Links Footer */}
+      {/* Card Footer */}
       <div className="mt-5 pt-3 border-t border-purple-900/40 flex items-center justify-between">
         <span className="text-[11px] text-slate-400 font-mono">
           E-Cell Mentor
         </span>
-        <div className="flex items-center gap-2">
-          {speaker.socialLinks?.linkedin && (
-            <a
-              href={speaker.socialLinks.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${speaker.name} LinkedIn Profile`}
-              className="p-2 rounded-lg bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white hover:border-purple-500 transition-colors"
-            >
-              <Linkedin className="w-3.5 h-3.5" />
-            </a>
-          )}
-          {speaker.socialLinks?.twitter && (
-            <a
-              href={speaker.socialLinks.twitter}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${speaker.name} Twitter Profile`}
-              className="p-2 rounded-lg bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white hover:border-purple-500 transition-colors"
-            >
-              <Twitter className="w-3.5 h-3.5" />
-            </a>
-          )}
-        </div>
+        <span className="text-[11px] text-purple-400 font-medium">
+          Keynote Speaker
+        </span>
       </div>
     </div>
   );

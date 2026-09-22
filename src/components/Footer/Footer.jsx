@@ -79,19 +79,10 @@ export const Footer = () => {
                     </a>
                   </li>
                 ))}
-                <li>
-                  <a
-                    href="#register"
-                    onClick={(e) => handleScrollTo(e, '#register')}
-                    className="text-amber-400 hover:text-amber-300 font-semibold transition-colors block py-0.5"
-                  >
-                    Register Seat
-                  </a>
-                </li>
               </ul>
             </div>
 
-            {/* Col 3: Reach Out & Socials (4 cols) */}
+            {/* Col 3: Reach Out (4 cols) */}
             <div className="md:col-span-4 text-left space-y-4">
               <h4 className="text-xs font-mono uppercase tracking-widest text-purple-300 font-bold mb-4">
                 Reach Out
@@ -102,25 +93,6 @@ export const Footer = () => {
               <p className="text-slate-300 text-xs leading-relaxed">
                 Official Email: <a href={`mailto:${CONTACT_DATA.institution.email}`} className="text-purple-300 hover:underline">{CONTACT_DATA.institution.email}</a>
               </p>
-
-              <div className="pt-2">
-                <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider block mb-2">
-                  Social Channels
-                </span>
-                <div className="flex items-center gap-2.5">
-                  {SITE_DATA.socials.map((s) => (
-                    <a
-                      key={s.name}
-                      href={s.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-3 py-1.5 rounded-lg bg-purple-950/60 border border-purple-800/40 text-slate-300 hover:text-white hover:border-purple-500 transition-colors text-xs font-medium"
-                    >
-                      {s.name}
-                    </a>
-                  ))}
-                </div>
-              </div>
             </div>
           </div>
 

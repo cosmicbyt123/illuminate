@@ -27,10 +27,10 @@ export const Step2Payment = ({ onNext, onBack }) => {
             Registration Fee
           </span>
           <span className="text-xl sm:text-2xl font-extrabold text-amber-400">
-            {EVENT_DATA.pricing.earlyBirdPrice}
+            ₹699
           </span>
           <span className="text-xs text-slate-400 ml-2">
-            (Early Bird Pass)
+            (Delegate Pass)
           </span>
         </div>
         <div className="text-right">

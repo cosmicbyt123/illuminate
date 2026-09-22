@@ -97,17 +97,8 @@ export const Navbar = ({ onRegisterClick }) => {
             })}
           </nav>
 
-          {/* Right Action: Register CTA & Mobile Hamburger */}
+          {/* Right Action: Mobile Hamburger */}
           <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={onRegisterClick}
-              className="hidden sm:inline-flex items-center gap-2 px-4 sm:px-5 py-2 sm:py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white bg-gradient-to-r from-purple-600 via-violet-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 border border-purple-400/40 shadow-glow-sm hover:shadow-glow-md transition-all active:scale-[0.98]"
-            >
-              <span>Register</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-
             {/* Mobile Hamburger Button */}
             <button
               type="button"
