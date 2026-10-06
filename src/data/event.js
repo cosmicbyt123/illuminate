@@ -17,10 +17,9 @@ export const EVENT_DATA = {
     partnerUrl: "https://www.ecell.in"
   },
   dates: {
-    display: "October 9 & 10, 2026",
+    display: "October 13, 2026",
     time: "09:30 AM - 04:00 PM",
-    duration: "2-Day Intensive Masterclass",
-    earlyBirdDeadline: "[ADD EARLY BIRD DEADLINE]"
+    duration: "1-Day Intensive Masterclass",
   },
   venue: {
     name: "Raghu Engineering College",
@@ -29,14 +28,31 @@ export const EVENT_DATA = {
   },
   pricing: {
     currency: "₹",
-    earlyBirdPrice: "₹699",
+    price: "₹799",
+    earlyBirdPrice: "₹799 Solo / ₹699 Squad",
     regularPrice: "[ADD REGULAR PRICE]",
-    includes: ["Official Certificate", "Delegate Kit & Manual", "Founder Masterclass", "Lunch & Refreshments"]
+    individual: {
+      price: 799,
+      displayPrice: "₹799",
+      label: "Individual Delegate",
+      description: "Solo access for 1 student"
+    },
+    group: {
+      pricePerHead: 699,
+      teamSize: 4,
+      totalPrice: 2796,
+      displayPrice: "₹2,796",
+      perHeadDisplay: "₹699 / head",
+      label: "Squad Pass (Fixed 4 Members)",
+      description: "Fixed 4 members • ₹699 per head (₹2,796 total) • Save ₹400"
+    },
+    includes: ["Official Certificate", "Founder Masterclass", "Startup Toolkit"]
   },
   payment: {
     upiId: "9391183459@ybl",
     qrCodeImage: "/assets/payment/qr-code.png",
-    payeeName: "Illuminate REC",
+    groupQrCodeImage: "/assets/payment/qr-code-group.png",
+    payeeName: "illuminate",
     whatsappGroupUrl: "https://chat.whatsapp.com/LtSa3ftDjZT7jmwGwK4nUM",
     instructions: "Scan the QR code using any UPI app (PhonePe, Google Pay, Paytm, BHIM) or pay via the UPI ID. Once completed, enter the 12-digit UTR and upload your payment screenshot."
   },

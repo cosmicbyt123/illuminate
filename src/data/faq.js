@@ -11,8 +11,8 @@ export const FAQ_DATA = [
   },
   {
     id: "faq-2",
-    question: "When is the Early Bird registration deadline?",
-    answer: "The Early Bird pass is available for a limited duration until [ADD EARLY BIRD DEADLINE]. After this period, passes revert to the regular pricing. We recommend registering early to secure reserved seating."
+    question: "What is the registration fee for Illuminate 2026?",
+    answer: "Individual delegate registration is ₹799. We also offer a special Squad Pass for a fixed group of 4 members at ₹699 per head (₹2,796 total squad fee), saving ₹400! Both passes include full access to the masterclass sessions and official accredited certificates jointly issued with E-Cell IIT Bombay."
   },
   {
     id: "faq-3",
@@ -32,7 +32,7 @@ export const FAQ_DATA = [
   {
     id: "faq-6",
     question: "Can I register individually or do I need a team?",
-    answer: "You can register individually. During the hands-on breakout sessions, you can either collaborate with friends or be paired with complementary peers from diverse engineering disciplines."
+    answer: "You can register either individually (₹799) or as a fixed squad of 4 members (₹699 per head, ₹2,796 total). During the hands-on breakout sessions, you can collaborate with your squad or be paired with complementary peers from diverse engineering disciplines."
   }
 ];
 

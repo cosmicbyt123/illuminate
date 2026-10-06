@@ -3,6 +3,7 @@ import { UploadCloud, Image as ImageIcon, X, ArrowRight, ArrowLeft, AlertCircle,
 import { validatePaymentProof } from '../../services/registrationService';
 
 export const Step3Proof = ({
+  registrationType = 'individual',
   proofData,
   updateProofData,
   onSubmit,
@@ -13,6 +14,8 @@ export const Step3Proof = ({
   const [previewUrl, setPreviewUrl] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = useRef(null);
+
+  const isGroup = registrationType === 'group';
 
   const handleUtrChange = (e) => {
     updateProofData({ utr: e.target.value });
@@ -67,10 +70,6 @@ export const Step3Proof = ({
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(false);
-
-    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      handleFileChange(e.dataTransfer.files[0]);
-    }
   };
 
   const handleRemoveFile = () => {
@@ -91,6 +90,22 @@ export const Step3Proof = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 text-left">
+      {/* Tier Confirmation Banner */}
+      <div className="glass-panel p-3.5 rounded-xl border-purple-500/30 bg-[#0c0620]/60 flex items-center justify-between">
+        <div>
+          <span className="text-[10px] font-mono uppercase tracking-wider text-purple-300 block">
+            Payment Verification For
+          </span>
+          <span className="text-xs sm:text-sm font-bold text-white">
+            {isGroup ? 'Squad Pass (Fixed 4 Members)' : 'Individual Delegate Pass'}
+          </span>
+        </div>
+        <div className="text-right">
+          <span className="text-xs sm:text-sm font-extrabold text-amber-400 font-mono">
+            {isGroup ? '₹2,796' : '₹799'}
+          </span>
+        </div>
+      </div>
       {/* 12-Digit UTR Field */}
       <div>
         <label

@@ -71,8 +71,8 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
           variants={textVariants}
           className="inline-flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 rounded-full glass-panel border-purple-500/40 text-[10px] sm:text-xs text-purple-300 mb-5 sm:mb-8 max-w-[92vw] overflow-hidden shadow-sm"
         >
-          <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping flex-shrink-0" />
-          <span className="font-bold text-amber-300 tracking-wider uppercase whitespace-nowrap flex-shrink-0">
+          <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+          <span className="font-bold text-emerald-300 tracking-wider uppercase whitespace-nowrap flex-shrink-0">
             {EVENT_DATA.offerBadge}
           </span>
           <span className="hidden sm:inline text-purple-400/50">&bull;</span>
@@ -163,19 +163,19 @@ export const Hero = ({ onRegisterClick, isReady = true }) => {
 
             {/* Pricing Callout */}
             <div className="flex items-start gap-3 pt-3 sm:pt-0 sm:pl-4">
-              <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 text-amber-300 flex-shrink-0">
+              <div className="p-2 rounded-xl bg-purple-950/50 border border-purple-500/30 text-purple-300 flex-shrink-0">
                 <Sparkles className="w-4 h-4" />
               </div>
               <div>
-                <p className="text-[11px] uppercase tracking-wider text-amber-300 font-semibold">
-                  Early Bird Pass
+                <p className="text-[11px] uppercase tracking-wider text-purple-300 font-semibold">
+                  Delegate Pass
                 </p>
                 <p className="text-xs sm:text-sm text-slate-200 font-medium leading-snug">
                   <span className="font-bold text-amber-300">
-                    {EVENT_DATA.pricing.earlyBirdPrice}
+                    {EVENT_DATA.pricing.price || EVENT_DATA.pricing.earlyBirdPrice}
                   </span>{' '}
                   <span className="text-[11px] text-slate-400">
-                    (Kit & Lunch Included)
+                    (Certificate & Masterclass Included)
                   </span>
                 </p>
               </div>

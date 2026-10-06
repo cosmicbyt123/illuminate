@@ -17,8 +17,11 @@ const STEPS = [
 export const RegistrationWizard = () => {
   const [currentStep, setCurrentStep] = useState(1);
 
-  // Persistent Form State
+  // Persistent Form State (Supports Individual & Fixed 4-member Squad)
   const [formData, setFormData] = useState({
+    registrationType: 'individual', // 'individual' | 'group'
+    teamName: '',
+    // Individual fields:
     name: '',
     roll: '',
     college: '',
@@ -27,6 +30,13 @@ export const RegistrationWizard = () => {
     location: '',
     phone: '',
     email: '',
+    // 4-member squad fields:
+    members: [
+      { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+      { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+      { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+      { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+    ],
   });
 
   // Persistent Proof State
@@ -60,10 +70,18 @@ export const RegistrationWizard = () => {
     const result = await submitRegistration(fullPayload);
 
     if (result.success) {
+      const isGroup = formData.registrationType === 'group';
+      const leadName = isGroup ? (formData.members[0]?.name || 'Squad Lead') : formData.name;
+      const primaryEmail = isGroup ? (formData.members[0]?.email || '') : formData.email;
+
       setSummaryData({
-        name: formData.name,
+        name: leadName,
+        teamName: isGroup ? formData.teamName : '',
+        registrationType: isGroup ? 'Squad Pass (4 Members)' : 'Individual Pass',
+        totalAmount: isGroup ? '₹2,796' : '₹799',
+        membersCount: isGroup ? 4 : 1,
         utr: proofData.utr,
-        email: formData.email,
+        email: primaryEmail,
         isDemo: result.data?.isDemo,
       });
       setSubmissionStatus('success');
@@ -75,6 +93,8 @@ export const RegistrationWizard = () => {
 
   const handleReset = () => {
     setFormData({
+      registrationType: 'individual',
+      teamName: '',
       name: '',
       roll: '',
       college: '',
@@ -83,6 +103,12 @@ export const RegistrationWizard = () => {
       location: '',
       phone: '',
       email: '',
+      members: [
+        { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+        { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+        { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+        { name: '', roll: '', college: '', branch: '', year: '', phone: '', email: '' },
+      ],
     });
     setProofData({
       utr: '',
@@ -100,15 +126,15 @@ export const RegistrationWizard = () => {
       <ScrollReveal>
         {/* Section Header */}
         <div className="text-center mb-10 sm:mb-12">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-300 text-xs font-semibold uppercase tracking-wider mb-3">
-            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 text-xs font-semibold uppercase tracking-wider mb-3">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span>{EVENT_DATA.offerBadge}</span>
           </div>
           <h2 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
             Registration & <span className="gradient-text-electric">Verification</span>
           </h2>
           <p className="text-slate-300 text-xs sm:text-base mt-2 max-w-xl mx-auto">
-            Reserve your seat with the Early Bird pass ({EVENT_DATA.pricing.earlyBirdPrice}). Follow the guided 3-step verification below.
+            Reserve your delegate pass ({EVENT_DATA.pricing.individual.displayPrice} Solo • {EVENT_DATA.pricing.group.perHeadDisplay} Squad of 4). Follow the guided 3-step verification below.
           </p>
         </div>
 
@@ -173,6 +199,7 @@ export const RegistrationWizard = () => {
 
           {currentStep === 2 && (
             <Step2Payment
+              registrationType={formData.registrationType}
               onNext={() => setCurrentStep(3)}
               onBack={() => setCurrentStep(1)}
             />
@@ -180,6 +207,7 @@ export const RegistrationWizard = () => {
 
           {currentStep === 3 && (
             <Step3Proof
+              registrationType={formData.registrationType}
               proofData={proofData}
               updateProofData={updateProofData}
               onSubmit={handleFinalSubmit}

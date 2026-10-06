@@ -19,29 +19,69 @@ export const readFileAsDataURL = (file) => {
 };
 
 /**
- * Validates registration form details
+ * Validates registration form details for both Individual and Group (4 members) modes
  * @param {Object} formData
  * @returns {{ isValid: boolean, errors: Object }}
  */
 export const validateRegistrationForm = (formData) => {
   const errors = {};
 
-  if (!formData.name?.trim()) errors.name = 'Full Name is required.';
-  if (!formData.roll?.trim()) errors.roll = 'Roll Number is required.';
-  if (!formData.college?.trim()) errors.college = 'College name is required.';
-  if (!formData.branch?.trim()) errors.branch = 'Please select your Branch / Department.';
-  if (!formData.year?.trim()) errors.year = 'Please select your Year of Study.';
-  
-  if (!formData.phone?.trim()) {
-    errors.phone = 'Mobile / WhatsApp number is required.';
-  } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
-    errors.phone = 'Enter a valid 10-digit mobile number.';
-  }
+  if (formData.registrationType === 'group') {
+    const members = formData.members || [];
+    errors.members = [{}, {}, {}, {}];
+    let hasGroupError = false;
 
-  if (!formData.email?.trim()) {
-    errors.email = 'Email address is required.';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-    errors.email = 'Enter a valid email address.';
+    for (let i = 0; i < 4; i++) {
+      const m = members[i] || {};
+      const mErrors = {};
+      const memberRole = i === 0 ? 'Team Leader' : `Member ${i + 1}`;
+
+      if (!m.name?.trim()) mErrors.name = `${memberRole} Name is required.`;
+      if (!m.roll?.trim()) mErrors.roll = 'Roll Number is required.';
+      if (!m.college?.trim()) mErrors.college = 'College name is required.';
+      if (!m.branch?.trim()) mErrors.branch = 'Select Branch.';
+      if (!m.year?.trim()) mErrors.year = 'Select Year.';
+      
+      if (!m.phone?.trim()) {
+        mErrors.phone = 'Mobile number is required.';
+      } else if (!/^[0-9]{10}$/.test(m.phone.replace(/[\s-]/g, ''))) {
+        mErrors.phone = 'Enter a valid 10-digit number.';
+      }
+
+      if (!m.email?.trim()) {
+        mErrors.email = 'Email address is required.';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m.email.trim())) {
+        mErrors.email = 'Enter a valid email.';
+      }
+
+      if (Object.keys(mErrors).length > 0) {
+        errors.members[i] = mErrors;
+        hasGroupError = true;
+      }
+    }
+
+    if (!hasGroupError) {
+      delete errors.members;
+    }
+  } else {
+    // Individual Delegate Validation
+    if (!formData.name?.trim()) errors.name = 'Full Name is required.';
+    if (!formData.roll?.trim()) errors.roll = 'Roll Number is required.';
+    if (!formData.college?.trim()) errors.college = 'College name is required.';
+    if (!formData.branch?.trim()) errors.branch = 'Please select your Branch / Department.';
+    if (!formData.year?.trim()) errors.year = 'Please select your Year of Study.';
+    
+    if (!formData.phone?.trim()) {
+      errors.phone = 'Mobile / WhatsApp number is required.';
+    } else if (!/^[0-9]{10}$/.test(formData.phone.replace(/[\s-]/g, ''))) {
+      errors.phone = 'Enter a valid 10-digit mobile number.';
+    }
+
+    if (!formData.email?.trim()) {
+      errors.email = 'Email address is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
+      errors.email = 'Enter a valid email address.';
+    }
   }
 
   return {
@@ -80,7 +120,7 @@ export const validatePaymentProof = (proofData) => {
  * Submits registration payload to the configured Google Apps Script Web App.
  * Data is ONLY sent when user completes Step 3 (after payment UTR and screenshot upload).
  * 
- * @param {Object} fullData { name, roll, college, branch, year, city, phone, email, utr, screenshot }
+ * @param {Object} fullData
  * @returns {Promise<{ success: boolean, error?: string, code?: string, data?: Object }>}
  */
 export const submitRegistration = async (fullData) => {
@@ -105,16 +145,71 @@ export const submitRegistration = async (fullData) => {
       screenshotType = fullData.screenshot.type || 'image/jpeg';
     }
 
-    // Build complete aggregated payload (Student Details + Payment UTR + Screenshot Base64)
+    const isGroup = fullData.registrationType === 'group';
+    const members = fullData.members || [];
+    const lead = isGroup ? (members[0] || {}) : fullData;
+
+    // Build comprehensive aggregated payload (supports both structured & flat sheet columns)
     const payload = {
-      name: fullData.name?.trim() || '',
-      roll: fullData.roll?.trim() || '',
-      college: fullData.college?.trim() || '',
-      branch: fullData.branch || '',
-      year: fullData.year || '',
-      location: fullData.location ? fullData.location.trim() : '',
-      phone: fullData.phone?.trim() || '',
-      email: fullData.email?.trim() || '',
+      registrationType: isGroup ? 'Squad (4 Members)' : 'Individual',
+      totalAmount: isGroup ? 2796 : 799,
+      teamName: isGroup ? (fullData.teamName?.trim() || '') : '',
+      // Primary / Lead delegate
+      name: (lead.name || fullData.name || '').trim(),
+      roll: (lead.roll || fullData.roll || '').trim(),
+      college: (lead.college || fullData.college || '').trim(),
+      branch: lead.branch || fullData.branch || '',
+      year: lead.year || fullData.year || '',
+      location: (fullData.location || '').trim(),
+      phone: (lead.phone || fullData.phone || '').trim(),
+      email: (lead.email || fullData.email || '').trim(),
+      
+      // All 4 squad members array
+      members: isGroup ? members : [
+        {
+          name: fullData.name?.trim() || '',
+          roll: fullData.roll?.trim() || '',
+          college: fullData.college?.trim() || '',
+          branch: fullData.branch || '',
+          year: fullData.year || '',
+          phone: fullData.phone?.trim() || '',
+          email: fullData.email?.trim() || '',
+        }
+      ],
+
+      // Flat columns for simple spreadsheet rows
+      member1_name: (lead.name || fullData.name || '').trim(),
+      member1_roll: (lead.roll || fullData.roll || '').trim(),
+      member1_college: (lead.college || fullData.college || '').trim(),
+      member1_branch: lead.branch || fullData.branch || '',
+      member1_year: lead.year || fullData.year || '',
+      member1_phone: (lead.phone || fullData.phone || '').trim(),
+      member1_email: (lead.email || fullData.email || '').trim(),
+
+      member2_name: isGroup ? (members[1]?.name || '').trim() : '',
+      member2_roll: isGroup ? (members[1]?.roll || '').trim() : '',
+      member2_college: isGroup ? (members[1]?.college || '').trim() : '',
+      member2_branch: isGroup ? (members[1]?.branch || '') : '',
+      member2_year: isGroup ? (members[1]?.year || '') : '',
+      member2_phone: isGroup ? (members[1]?.phone || '').trim() : '',
+      member2_email: isGroup ? (members[1]?.email || '').trim() : '',
+
+      member3_name: isGroup ? (members[2]?.name || '').trim() : '',
+      member3_roll: isGroup ? (members[2]?.roll || '').trim() : '',
+      member3_college: isGroup ? (members[2]?.college || '').trim() : '',
+      member3_branch: isGroup ? (members[2]?.branch || '') : '',
+      member3_year: isGroup ? (members[2]?.year || '') : '',
+      member3_phone: isGroup ? (members[2]?.phone || '').trim() : '',
+      member3_email: isGroup ? (members[2]?.email || '').trim() : '',
+
+      member4_name: isGroup ? (members[3]?.name || '').trim() : '',
+      member4_roll: isGroup ? (members[3]?.roll || '').trim() : '',
+      member4_college: isGroup ? (members[3]?.college || '').trim() : '',
+      member4_branch: isGroup ? (members[3]?.branch || '') : '',
+      member4_year: isGroup ? (members[3]?.year || '') : '',
+      member4_phone: isGroup ? (members[3]?.phone || '').trim() : '',
+      member4_email: isGroup ? (members[3]?.email || '').trim() : '',
+
       utr: fullData.utr ? fullData.utr.trim() : '',
       screenshotName,
       screenshotType,
@@ -146,6 +241,8 @@ export const submitRegistration = async (fullData) => {
           name: payload.name,
           utr: payload.utr,
           email: payload.email,
+          registrationType: payload.registrationType,
+          totalAmount: payload.totalAmount,
           isDemo: true,
         },
       };
@@ -174,6 +271,8 @@ export const submitRegistration = async (fullData) => {
           name: payload.name,
           utr: payload.utr,
           email: payload.email,
+          registrationType: payload.registrationType,
+          totalAmount: payload.totalAmount,
           isDemo: false,
         },
       };

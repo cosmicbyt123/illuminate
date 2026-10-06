@@ -1,9 +1,28 @@
 import React, { useState } from 'react';
-import { QrCode, Copy, Check, ArrowRight, ArrowLeft, Smartphone, ShieldCheck } from 'lucide-react';
+import { QrCode, Copy, Check, ArrowRight, ArrowLeft, Smartphone, ShieldCheck, Users, User, Sparkles } from 'lucide-react';
 import EVENT_DATA from '../../data/event';
 
-export const Step2Payment = ({ onNext, onBack }) => {
+export const Step2Payment = ({ registrationType = 'individual', onNext, onBack }) => {
   const [copied, setCopied] = useState(false);
+
+  const isGroup = registrationType === 'group';
+
+  // Specific QR code and amount based on registration type
+  const qrImage = isGroup
+    ? EVENT_DATA.payment.groupQrCodeImage
+    : EVENT_DATA.payment.qrCodeImage;
+
+  const amount = isGroup
+    ? EVENT_DATA.pricing.group.totalPrice
+    : EVENT_DATA.pricing.individual.price;
+
+  const displayPrice = isGroup
+    ? EVENT_DATA.pricing.group.displayPrice
+    : EVENT_DATA.pricing.individual.displayPrice;
+
+  const passLabel = isGroup
+    ? 'Squad Pass (Fixed 4 Members)'
+    : 'Individual Delegate Pass';
 
   const handleCopyUpi = () => {
     if (navigator.clipboard) {
@@ -13,44 +32,62 @@ export const Step2Payment = ({ onNext, onBack }) => {
     }
   };
 
-  // Direct UPI App Deep Link for Mobile (PhonePe/GPay/Paytm)
+  // Direct UPI App Deep Link for Mobile (PhonePe/GPay/Paytm) with exact amount pre-filled!
   const upiDeepLink = `upi://pay?pa=${encodeURIComponent(
     EVENT_DATA.payment.upiId
-  )}&pn=${encodeURIComponent(EVENT_DATA.payment.payeeName)}&cu=INR`;
+  )}&pn=${encodeURIComponent(EVENT_DATA.payment.payeeName)}&am=${amount}&cu=INR`;
 
   return (
     <div className="space-y-6 text-center">
       {/* Price Summary Banner */}
       <div className="glass-panel p-4 rounded-2xl border-purple-500/30 flex items-center justify-between">
         <div className="text-left">
-          <span className="text-xs text-purple-300 font-mono uppercase tracking-wider block">
-            Registration Fee
-          </span>
-          <span className="text-xl sm:text-2xl font-extrabold text-amber-400">
-            {EVENT_DATA.pricing.earlyBirdPrice}
-          </span>
-          <span className="text-xs text-slate-400 ml-2">
-            (Early Bird Pass)
-          </span>
+          <div className="flex items-center gap-1.5 text-xs text-purple-300 font-mono uppercase tracking-wider">
+            {isGroup ? <Users className="w-3.5 h-3.5 text-emerald-400" /> : <User className="w-3.5 h-3.5" />}
+            <span>{passLabel}</span>
+          </div>
+          <div className="flex items-baseline gap-2 mt-0.5">
+            <span className="text-xl sm:text-2xl font-extrabold text-amber-400">
+              {displayPrice}
+            </span>
+            {isGroup && (
+              <span className="text-xs text-emerald-400 font-medium">
+                (₹699 per head)
+              </span>
+            )}
+          </div>
         </div>
+
         <div className="text-right">
-          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-full">
-            <ShieldCheck className="w-3.5 h-3.5" />
-            <span>Pass Verified</span>
-          </span>
+          {isGroup ? (
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+              <Sparkles className="w-3.5 h-3.5" />
+              <span>Squad Pass Verified</span>
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-400 bg-emerald-950/60 border border-emerald-500/30 px-2.5 py-1 rounded-full">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>Solo Pass Verified</span>
+            </span>
+          )}
         </div>
       </div>
 
       {/* High-Contrast Verified QR Code Frame */}
       <div className="relative p-3.5 bg-white rounded-2xl border-4 border-purple-600/60 shadow-xl max-w-[240px] sm:max-w-[260px] mx-auto">
         <img
-          src={EVENT_DATA.payment.qrCodeImage}
-          alt="Illuminate Registration UPI Payment QR"
+          src={qrImage}
+          alt={`Illuminate Registration UPI Payment QR - ${passLabel}`}
           className="w-full h-auto object-contain rounded-lg aspect-square"
         />
-        <div className="mt-2 text-center text-slate-800 font-bold text-[10px] uppercase tracking-wider">
-          Scan with Any UPI App
+        <div className="mt-2 text-center text-slate-900 font-bold text-[10px] uppercase tracking-wider">
+          Scan to Pay {displayPrice} via Any UPI App
         </div>
+        {isGroup && (
+          <div className="text-[9px] font-semibold text-purple-700 uppercase tracking-tight">
+            Covers All 4 Squad Members
+          </div>
+        )}
       </div>
 
       {/* Copy UPI ID Box */}
@@ -92,7 +129,7 @@ export const Step2Payment = ({ onNext, onBack }) => {
           className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-[#140b33] border border-purple-500/40 hover:bg-[#1d1047] text-purple-200 hover:text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm"
         >
           <Smartphone className="w-4 h-4 text-purple-400" />
-          <span>Open Supported UPI App Directly</span>
+          <span>Open Supported UPI App Directly ({displayPrice})</span>
         </a>
       </div>
 
@@ -106,7 +143,9 @@ export const Step2Payment = ({ onNext, onBack }) => {
 
       {/* Instruction Note */}
       <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-        After completing the payment in your UPI app, take a screenshot of the receipt and note the 12-digit UPI Ref / UTR number.
+        {isGroup
+          ? 'Make a single payment of ₹2,796 for your 4 squad members. Take a screenshot of the receipt and note the 12-digit UPI UTR number.'
+          : 'After completing payment of ₹799 in your UPI app, take a screenshot of the receipt and note the 12-digit UPI Ref / UTR number.'}
       </p>
 
       {/* Navigation Actions */}

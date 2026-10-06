@@ -121,8 +121,22 @@ export const Step4StatusModal = ({
             {/* Verified Summary Box */}
             <div className="w-full bg-[#08031a] rounded-xl p-3 border border-purple-800/40 text-left space-y-1.5 text-xs">
               <div className="flex items-center justify-between border-b border-purple-900/30 pb-1.5">
-                <span className="text-slate-400 text-[11px]">Delegate Name:</span>
+                <span className="text-slate-400 text-[11px]">Pass Category:</span>
+                <span className="text-emerald-400 font-bold">{summaryData?.registrationType || 'Delegate Pass'}</span>
+              </div>
+              {summaryData?.teamName && (
+                <div className="flex items-center justify-between border-b border-purple-900/30 pb-1.5">
+                  <span className="text-slate-400 text-[11px]">Squad Name:</span>
+                  <span className="text-white font-bold truncate max-w-[190px]">{summaryData.teamName}</span>
+                </div>
+              )}
+              <div className="flex items-center justify-between border-b border-purple-900/30 pb-1.5">
+                <span className="text-slate-400 text-[11px]">{summaryData?.membersCount === 4 ? 'Squad Lead:' : 'Delegate Name:'}</span>
                 <span className="text-white font-bold truncate max-w-[190px]">{summaryData?.name || 'Registered Delegate'}</span>
+              </div>
+              <div className="flex items-center justify-between border-b border-purple-900/30 pb-1.5">
+                <span className="text-slate-400 text-[11px]">Total Fee Paid:</span>
+                <span className="text-amber-400 font-bold font-mono">{summaryData?.totalAmount || '₹799'}</span>
               </div>
               <div className="flex items-center justify-between border-b border-purple-900/30 pb-1.5">
                 <span className="text-slate-400 text-[11px]">UTR / Reference:</span>
