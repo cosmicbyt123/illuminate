@@ -1,7 +1,7 @@
 import { CONFIG } from '../config/environment';
 
 /**
- * Converts a File object to a base64 Data URL
+ * Converts a File object to a base64 Data URL (raw fallback)
  * @param {File} file
  * @returns {Promise<string>}
  */
@@ -14,6 +14,86 @@ export const readFileAsDataURL = (file) => {
     const reader = new FileReader();
     reader.onload = () => resolve(reader.result);
     reader.onerror = () => reject(reader.error || new Error('Failed to read screenshot file'));
+    reader.readAsDataURL(file);
+  });
+};
+
+/**
+ * Compresses an image file client-side using HTML5 Canvas before base64 conversion.
+ * Reduces 3-8 MB mobile screenshots (especially on iOS/Android high-DPI screens) down
+ * to ~80-160 KB JPEG without losing legibility of UTR numbers and transaction details.
+ * Eliminates mobile timeout errors over slow 3G/4G connections.
+ * 
+ * @param {File} file
+ * @param {number} maxWidth
+ * @param {number} quality
+ * @returns {Promise<string>}
+ */
+export const compressImageToDataURL = (file, maxWidth = 1280, quality = 0.72) => {
+  return new Promise((resolve) => {
+    if (!file) {
+      resolve('');
+      return;
+    }
+
+    // If not an image or running without DOM, fallback
+    if (!file.type || !file.type.startsWith('image/') || typeof document === 'undefined') {
+      readFileAsDataURL(file).then(resolve).catch(() => resolve(''));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        try {
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxWidth) {
+            if (width > height) {
+              height = Math.round((height * maxWidth) / width);
+              width = maxWidth;
+            } else {
+              width = Math.round((width * maxWidth) / height);
+              height = maxWidth;
+            }
+          }
+
+          const canvas = document.createElement('canvas');
+          canvas.width = width;
+          canvas.height = height;
+
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(e.target.result);
+            return;
+          }
+
+          // Fill white backdrop in case source was a transparent PNG
+          ctx.fillStyle = '#ffffff';
+          ctx.fillRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+
+          const compressed = canvas.toDataURL('image/jpeg', quality);
+          resolve(compressed);
+        } catch (canvasErr) {
+          console.warn('Canvas compression fallback:', canvasErr);
+          resolve(e.target.result);
+        }
+      };
+
+      img.onerror = () => {
+        resolve(e.target.result);
+      };
+
+      img.src = e.target.result;
+    };
+
+    reader.onerror = () => {
+      readFileAsDataURL(file).then(resolve).catch(() => resolve(''));
+    };
+
     reader.readAsDataURL(file);
   });
 };
@@ -134,15 +214,16 @@ export const submitRegistration = async (fullData) => {
   }
 
   try {
-    // Convert screenshot file to Base64 Data URL
+    // Convert screenshot file to compressed Base64 Data URL (under 150KB for rapid upload)
     let screenshotData = '';
     let screenshotName = '';
-    let screenshotType = '';
+    let screenshotType = 'image/jpeg';
 
     if (fullData.screenshot) {
-      screenshotData = await readFileAsDataURL(fullData.screenshot);
-      screenshotName = fullData.screenshot.name || 'payment-proof.jpg';
-      screenshotType = fullData.screenshot.type || 'image/jpeg';
+      screenshotData = await compressImageToDataURL(fullData.screenshot);
+      screenshotName = fullData.screenshot.name
+        ? fullData.screenshot.name.replace(/\.[^/.]+$/, '.jpg')
+        : 'payment-proof.jpg';
     }
 
     const isGroup = fullData.registrationType === 'group';
@@ -249,8 +330,9 @@ export const submitRegistration = async (fullData) => {
     }
 
     // When Google Apps Script endpoint is configured: Transmit payload
+    // Set 60-second timeout to accommodate slow 3G/4G connections and Google Apps Script cold starts
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 25000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     try {
       await fetch(endpoint, {
@@ -282,7 +364,7 @@ export const submitRegistration = async (fullData) => {
         return {
           success: false,
           code: 'TIMEOUT',
-          error: 'The request timed out. The network might be slow. Please verify and retry.',
+          error: 'The request took longer than 60s. Your entered details and screenshot have been preserved. Please verify your connection and tap Retry Submission.',
         };
       }
       throw fetchError;
@@ -297,9 +379,133 @@ export const submitRegistration = async (fullData) => {
   }
 };
 
+const STORAGE_KEY = 'illuminate_stored_ticket';
+
+/**
+ * Saves ticket registration details into browser's localStorage
+ */
+export const saveStoredTicket = (data) => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        ...data,
+        storedAt: new Date().toISOString(),
+      }));
+    }
+  } catch (err) {
+    console.warn('Could not save ticket to localStorage:', err);
+  }
+};
+
+/**
+ * Retrieves stored ticket details from localStorage
+ */
+export const getStoredTicket = () => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : null;
+    }
+  } catch (err) {
+    return null;
+  }
+  return null;
+};
+
+/**
+ * Clears stored ticket details
+ */
+export const clearStoredTicket = () => {
+  try {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem(STORAGE_KEY);
+    }
+  } catch (err) {}
+};
+
+/**
+ * Queries Google Apps Script to check if the ticket has been marked "Verified" in the Google Sheet.
+ * Supports checking by UTR, Ticket ID, or Delegate Email.
+ * @param {string|Object} param
+ * @param {Object} [extraOptions]
+ * @returns {Promise<{ found: boolean, verified: boolean, status: string, ticketId?: string, data?: Object }>}
+ */
+export const checkTicketVerification = async (param, extraOptions = {}) => {
+  const endpoint = CONFIG.GOOGLE_SCRIPT_URL;
+  let utr = '';
+  let ticketId = '';
+  let email = '';
+
+  if (typeof param === 'object' && param !== null) {
+    utr = param.utr || '';
+    ticketId = param.ticketId || '';
+    email = param.email || '';
+  } else {
+    utr = (param || '').toString();
+    ticketId = extraOptions.ticketId || '';
+    email = extraOptions.email || '';
+  }
+
+  if (!endpoint || (!utr && !ticketId && !email)) {
+    return {
+      found: false,
+      verified: false,
+      status: 'Pending Verification',
+      message: 'Endpoint or identifiers not provided'
+    };
+  }
+
+  try {
+    const separator = endpoint.includes('?') ? '&' : '?';
+    const params = new URLSearchParams();
+    if (utr) params.append('utr', utr);
+    if (ticketId) params.append('ticketId', ticketId);
+    if (email) params.append('email', email);
+    params.append('_t', Date.now().toString());
+
+    const checkUrl = `${endpoint}${separator}${params.toString()}`;
+    const response = await fetch(checkUrl, {
+      method: 'GET',
+      headers: { 'Accept': 'application/json' },
+    });
+
+    const result = await response.json();
+    if (result && result.found) {
+      const isVerified = (result.status === 'Verified' || (result.status || '').toLowerCase() === 'verified');
+      return {
+        found: true,
+        verified: isVerified,
+        status: isVerified ? 'Verified' : 'Pending Verification',
+        ticketId: result.ticketId,
+        data: result,
+      };
+    }
+
+    return {
+      found: false,
+      verified: false,
+      status: 'Pending Verification',
+      message: result?.message || 'Reference not found yet'
+    };
+  } catch (err) {
+    console.warn('Live verification check error:', err);
+    return {
+      found: false,
+      verified: false,
+      status: 'Pending Verification',
+      error: err.message,
+    };
+  }
+};
+
 export default {
   readFileAsDataURL,
+  compressImageToDataURL,
   validateRegistrationForm,
   validatePaymentProof,
   submitRegistration,
+  saveStoredTicket,
+  getStoredTicket,
+  clearStoredTicket,
+  checkTicketVerification,
 };

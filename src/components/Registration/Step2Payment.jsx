@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { QrCode, Copy, Check, ArrowRight, ArrowLeft, Smartphone, ShieldCheck, Users, User, Sparkles } from 'lucide-react';
+import { QrCode, Copy, Check, ArrowRight, ArrowLeft, Camera, ShieldCheck, Users, User, Sparkles } from 'lucide-react';
 import EVENT_DATA from '../../data/event';
 
 export const Step2Payment = ({ registrationType = 'individual', onNext, onBack }) => {
@@ -122,31 +122,11 @@ export const Step2Payment = ({ registrationType = 'individual', onNext, onBack }
         </div>
       </div>
 
-      {/* Direct 1-Click Pay on Mobile */}
-      <div className="max-w-md mx-auto">
-        <a
-          href={upiDeepLink}
-          className="w-full min-h-[48px] px-4 py-3 rounded-xl bg-[#140b33] border border-purple-500/40 hover:bg-[#1d1047] text-purple-200 hover:text-white font-semibold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-sm"
-        >
-          <Smartphone className="w-4 h-4 text-purple-400" />
-          <span>Open Supported UPI App Directly ({displayPrice})</span>
-        </a>
+      {/* Simple Instruction: Take screenshot & pay via UPI */}
+      <div className="max-w-md mx-auto p-3 sm:p-3.5 rounded-xl bg-[#120729] border border-purple-500/35 flex items-center justify-center gap-2 text-xs sm:text-sm text-purple-200 shadow-sm text-center">
+        <Camera className="w-4 h-4 text-amber-400 flex-shrink-0" />
+        <span>Take screenshot of the QR code and pay via UPI.</span>
       </div>
-
-      {/* Supported UPI Badges */}
-      <div className="flex flex-wrap items-center justify-center gap-2 text-xs font-semibold text-slate-400">
-        <span className="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-800/40 text-[11px]">PhonePe</span>
-        <span className="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-800/40 text-[11px]">Google Pay</span>
-        <span className="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-800/40 text-[11px]">Paytm</span>
-        <span className="px-2.5 py-1 rounded-lg bg-purple-950/60 border border-purple-800/40 text-[11px]">BHIM UPI</span>
-      </div>
-
-      {/* Instruction Note */}
-      <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
-        {isGroup
-          ? 'Make a single payment of ₹2,796 for your 4 squad members. Take a screenshot of the receipt and note the 12-digit UPI UTR number.'
-          : 'After completing payment of ₹799 in your UPI app, take a screenshot of the receipt and note the 12-digit UPI Ref / UTR number.'}
-      </p>
 
       {/* Navigation Actions */}
       <div className="pt-2 flex flex-col-reverse sm:flex-row items-center justify-between gap-3 max-w-md mx-auto">

@@ -340,22 +340,25 @@ export const Step1Details = ({ formData, updateFormData, onNext }) => {
             </div>
           </div>
 
-          {/* Location */}
+          {/* Nearest Bus Stop */}
           <div>
             <label
               htmlFor="location"
               className="block text-xs font-mono uppercase tracking-wider text-purple-300 font-semibold mb-1.5"
             >
-              City / Location
+              Nearest Bus Stop
             </label>
             <input
               id="location"
               type="text"
               value={formData.location || ''}
               onChange={(e) => handleIndividualChange('location', e.target.value)}
-              placeholder="e.g. Visakhapatnam, Vijayawada"
+              placeholder="e.g. Maddilapalem, RTC Complex, Tagarapuvalasa, Anandapuram"
               className="w-full min-h-[48px] bg-[#0d0724] border border-purple-500/30 rounded-xl px-4 py-3 text-sm sm:text-base text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400 transition-all"
             />
+            <p className="text-[11px] text-slate-400 mt-1">
+              Your nearest bus stop or boarding point for college transport guidance.
+            </p>
           </div>
 
           {/* Mobile & Email */}
@@ -417,22 +420,41 @@ export const Step1Details = ({ formData, updateFormData, onNext }) => {
       {/* ======================================================== */}
       {isGroup && (
         <div className="space-y-5">
-          {/* Optional Team Name */}
-          <div className="glass-panel p-4 rounded-2xl border-purple-500/30">
-            <label
-              htmlFor="teamName"
-              className="block text-xs font-mono uppercase tracking-wider text-purple-300 font-semibold mb-1.5"
-            >
-              Squad / Venture Name (Optional)
-            </label>
-            <input
-              id="teamName"
-              type="text"
-              value={formData.teamName || ''}
-              onChange={(e) => updateFormData({ teamName: e.target.value })}
-              placeholder="e.g. NextGen Innovators"
-              className="w-full min-h-[44px] bg-[#0d0724] border border-purple-500/30 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
-            />
+          {/* Squad Name & Nearest Bus Stop */}
+          <div className="glass-panel p-4 rounded-2xl border-purple-500/30 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label
+                htmlFor="teamName"
+                className="block text-xs font-mono uppercase tracking-wider text-purple-300 font-semibold mb-1.5"
+              >
+                Squad / Venture Name (Optional)
+              </label>
+              <input
+                id="teamName"
+                type="text"
+                value={formData.teamName || ''}
+                onChange={(e) => updateFormData({ teamName: e.target.value })}
+                placeholder="e.g. NextGen Innovators"
+                className="w-full min-h-[44px] bg-[#0d0724] border border-purple-500/30 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="squadLocation"
+                className="block text-xs font-mono uppercase tracking-wider text-purple-300 font-semibold mb-1.5"
+              >
+                Nearest Bus Stop
+              </label>
+              <input
+                id="squadLocation"
+                type="text"
+                value={formData.location || ''}
+                onChange={(e) => updateFormData({ location: e.target.value })}
+                placeholder="e.g. Maddilapalem, RTC Complex, Anandapuram"
+                className="w-full min-h-[44px] bg-[#0d0724] border border-purple-500/30 rounded-xl px-4 py-2.5 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-purple-400 focus:ring-1 focus:ring-purple-400"
+              />
+            </div>
           </div>
 
           {/* Member Navigation Tabs */}

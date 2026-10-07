@@ -14,6 +14,7 @@ import RegistrationWizard from './components/Registration/RegistrationWizard';
 import FAQSection from './components/FAQ/FAQSection';
 import ContactSection from './components/Contact/ContactSection';
 import Footer from './components/Footer/Footer';
+import FloatingPassesButton from './components/ui/FloatingPassesButton';
 
 const pageVariants = {
   initial: { opacity: 0, y: 10 },
@@ -78,6 +79,9 @@ export function App() {
 
       {/* Floating Mobile Bottom Thumb Dock (iOS / Threads Style) */}
       <MobileBottomDock />
+
+      {/* Floating PASSES Side Tab (Ticket Badge) */}
+      {!showPreloader && <FloatingPassesButton />}
 
       {/* Main Page Content with Animated Transitions */}
       <main className="relative z-10 flex-1 flex flex-col pt-20 pb-8 md:pb-0">
